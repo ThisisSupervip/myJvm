@@ -1,5 +1,6 @@
 package com.lgb.entry;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -15,20 +16,14 @@ public class DirEntry extends Entry {
 
     @Override
     public byte[] readClass(String className){
-        File classFile = absPath.resolve(className).toFile();
-        try (FileInputStream fileInputStream = new FileInputStream(classFile)){
-            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-                byte[] buffer = new byte[1024];
-                int len = 0;
-                while ((len = IOUtils.read(fileInputStream, buffer)) != -1) {
-                    baos.write(buffer, 0, len);
-                }
-                return baos.toByteArray();
-            }
+        File classFile = absPath.resolve(className.replace(".","/")+".class").toFile();
+        byte[] bytes = null;
+        try {
+            bytes = FileUtils.readFileToByteArray(classFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return bytes;
     }
 
 

@@ -46,12 +46,6 @@ public class ZipEntry extends Entry {
         return new byte[0];
     }
 
-    public static void main(String[] args) {
-        ZipEntry zipEntry = new ZipEntry("D://fastjson.jar");
-        byte[] bytes = zipEntry.readClass("com.alibaba.fastjson.JSON");
-        System.out.println();
-    }
-
     @Override
     public String toString() {
         return super.toString();

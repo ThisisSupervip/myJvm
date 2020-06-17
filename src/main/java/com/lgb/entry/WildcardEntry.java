@@ -27,9 +27,4 @@ public class WildcardEntry extends Entry {
         return compositeEntry.readClass(className);
     }
 
-    public static void main(String[] args) {
-        WildcardEntry wildcardEntry = new WildcardEntry("D:/*");
-        byte[] bytes = wildcardEntry.readClass("com.alibaba.fastjson.JSON");
-        System.out.println();
-    }
 }
