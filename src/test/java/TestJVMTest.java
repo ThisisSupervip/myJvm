@@ -7,8 +7,8 @@ class TestJVMTest {
 
    @Test
    public void test_classpath_loader(){
-      Classpath classpath = new Classpath("D:/*");
-      byte[] bytes = classpath.readClass("com.alibaba.fastjson.JSON");
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\classes");
+      byte[] bytes = classpath.readClass("com.lgb.TestClass");
       ClassFile classFile = new ClassFile(bytes);
       String hexString = bytesToHex(bytes);
       Assertions.assertTrue(hexString.startsWith("cafebabe"));

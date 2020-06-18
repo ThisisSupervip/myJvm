@@ -1,16 +1,19 @@
 package com.lgb.classfile.fundamental;
 
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class U2 {
     public byte[] value;
+    public int intValue;
 
     public U2(byte[] value) {
         this.value = value;
+        this.intValue = toInt();
     }
 
-    public int toInt(){
+    int toInt(){
         byte[] v = new byte[4];
         System.arraycopy(value, 0, v, 2, 2);
         return ByteBuffer.wrap(v).getInt();

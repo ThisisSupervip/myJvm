@@ -1,6 +1,5 @@
 package com.lgb.classfile.fundamental;
 
-import com.lgb.classfile.AttributeInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +15,6 @@ public class MemberInfo {
     private U2 accessFlags;
     private U2 nameIndex;
     private U2 descriptorIndex;
-    private List<AttributeInfo> attributeInfos;
+    private AttributeInfo[] attributeInfos;
 
 }

@@ -3,12 +3,9 @@ package com.lgb.classfile.fundamental;
 import com.lgb.classfile.ClassReader;
 import com.sun.org.apache.bcel.internal.classfile.ClassFormatException;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class ConstantInfoType {
 
-    //see https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.4
+    //see https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4
 
     public static final int CONSTANT_Class = 7;
     public static final int CONSTANT_Fieldref = 9;
@@ -171,7 +168,7 @@ public class ConstantInfoType {
                 return new ConstantDoubleInfo(classReader.readU4(), classReader.readU4());
             case CONSTANT_Utf8:
                 U2 lengthByte = classReader.readU2();
-                int length = lengthByte.toInt();
+                int length = lengthByte.intValue;
                 return new ConstantUtf8Info(lengthByte, classReader.readBytes(length));
             case CONSTANT_String:
                 return new ConstantStringInfo(classReader.readU2Int());
@@ -198,14 +195,14 @@ public class ConstantInfoType {
 
     }
 
-    public static List<ConstantInfo> readConstantPool(ClassReader classReader){
+    public static ConstantInfo[] readConstantPool(ClassReader classReader){
         int cpCount = classReader.readU2Int();
-        List<ConstantInfo> res = new LinkedList<>();
+        ConstantInfo[] res = new ConstantInfo[cpCount];
         int i = 1;
         while (i<cpCount){
             int tag = classReader.readU1().toShort();
             ConstantInfo constantInfo = processConstantInfo(tag, classReader);
-            res.add(constantInfo);
+            res[i] = constantInfo;
             if(CONSTANT_Double == tag || CONSTANT_Long == tag){
                 i+=2;
                 continue;

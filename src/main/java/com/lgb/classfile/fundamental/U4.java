@@ -1,5 +1,6 @@
 package com.lgb.classfile.fundamental;
 
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -19,7 +20,13 @@ public class U4 {
     }
 
     public long toLong(){
-        return ByteBuffer.wrap(value).getLong();
+        byte[] longBytes = new byte[8];
+        System.arraycopy(value, 0, longBytes, 4, 4);
+        return ByteBuffer.wrap(longBytes).getLong();
+    }
+
+    public int toInt(){
+        return ByteBuffer.wrap(value).getInt();
     }
 
     @Override
