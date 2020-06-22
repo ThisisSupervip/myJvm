@@ -1,11 +1,11 @@
 package com.lgb.rtda;
 
 public class Thread {
-    int pc;
-    Frame[] stack;
-    int stackSize;
+    private int pc;
+    public final Frame[] stack;
+    private int stackSize;
 
-    Thread() {
+    public Thread() {
         stackSize = 0;
         stack = new Frame[1024];
     }
@@ -21,5 +21,16 @@ public class Thread {
             throw new RuntimeException("jvm stack is empty");
         }
         return stack[--stackSize];
+    }
+
+    public Frame newFrame(int maxLocals, int maxStack) {
+        return new Frame(maxLocals, maxStack, this);
+    }
+
+    public void setPC(int pc) {
+        this.pc = pc;
+    }
+    public int pc() {
+        return this.pc;
     }
 }

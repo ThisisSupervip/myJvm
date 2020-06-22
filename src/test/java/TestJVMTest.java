@@ -1,4 +1,7 @@
+import com.lgb.Interpreter;
+import com.lgb.JVM;
 import com.lgb.classfile.ClassFile;
+import com.lgb.classfile.fundamental.MemberInfo;
 import com.lgb.classpath.Classpath;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,6 +15,14 @@ class TestJVMTest {
       ClassFile classFile = new ClassFile(bytes);
       String hexString = bytesToHex(bytes);
       Assertions.assertTrue(hexString.startsWith("cafebabe"));
+   }
+
+   @Test
+   public void test_interpreter(){
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\classes");
+      ClassFile classFile = JVM.loadClass("GaussTest", classpath);
+      MemberInfo mainMethod = JVM.getMainMethod(classFile);
+      Interpreter.interpret(mainMethod);
    }
 
    public static String bytesToHex(byte[] bytes) {

@@ -17,7 +17,7 @@ public class OperandStack {
         if(size>maxSize) {
             //todo throw
         }
-        byteBuffer.putInt(val);
+        byteBuffer.putInt(size*4, val);
         size++;
     }
 
@@ -27,7 +27,7 @@ public class OperandStack {
     }
 
     public void pushFloat(float val) {
-        byteBuffer.putFloat(val);
+        byteBuffer.putFloat(size*4, val);
         size++;
     }
 
@@ -37,7 +37,7 @@ public class OperandStack {
     }
 
     public void pushLong(long val) {
-        byteBuffer.putLong(val);
+        byteBuffer.putLong(size*8, val);
         size+=2;
     }
 
@@ -47,7 +47,7 @@ public class OperandStack {
     }
 
     public void pushDouble(double val) {
-        byteBuffer.putDouble(val);
+        byteBuffer.putDouble(size*8, val);
         size+=2;
     }
 
@@ -56,4 +56,21 @@ public class OperandStack {
         return byteBuffer.getDouble(size*4);
     }
 
+    public void pushRef(Object ref) {
+
+    }
+
+    public Object popRef(){
+        return null;
+    }
+
+    public void pushSlot(byte slot) {
+        this.byteBuffer.putInt(slot);
+        this.size++;
+    }
+
+    public byte popSlot(){
+        this.size--;
+        return this.byteBuffer.get(size);
+    }
 }

@@ -69,14 +69,31 @@ public class ClassFile {
 
     private MemberInfo readMember(){
         U2 accessFlags = classReader.readU2();
-        U2 nameIndex = classReader.readU2();
-        U2 descriptorIndex = classReader.readU2();
+        int nameIndex = classReader.readU2().intValue;
+        int descriptorIndex = classReader.readU2().intValue;
         AttributeInfo[] attributeInfos = AttributeInfoType.readAttributes(classReader, constantPool);
         return MemberInfo.builder()
                 .accessFlags(accessFlags)
                 .nameIndex(nameIndex)
+                .constantPool(constantPool)
                 .descriptorIndex(descriptorIndex)
                 .attributeInfos(attributeInfos).build();
     }
 
+
+    public MemberInfo[] getFields() {
+        return fields;
+    }
+
+    public MemberInfo[] getMethods() {
+        return methods;
+    }
+
+    public AttributeInfo[] getAttributes() {
+        return attributes;
+    }
+
+    public ConstantInfo[] getConstantPool() {
+        return constantPool;
+    }
 }

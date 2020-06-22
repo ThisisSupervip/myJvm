@@ -11,10 +11,34 @@ import java.util.List;
 @Setter
 @Builder
 public class MemberInfo {
-    private ConstantInfo constantPool;
+
+    private ConstantInfo[] constantPool;
     private U2 accessFlags;
-    private U2 nameIndex;
-    private U2 descriptorIndex;
+    private int nameIndex;
+    private int descriptorIndex;
     private AttributeInfo[] attributeInfos;
+
+
+    public AttributeInfoType.CodeAttribute codeAttribute(){
+        for (int i = 0; i < attributeInfos.length; i++) {
+            if(attributeInfos[i] instanceof AttributeInfoType.CodeAttribute){
+                return (AttributeInfoType.CodeAttribute) attributeInfos[i];
+            }
+        }
+        return null;
+    }
+
+    public String name() {
+        return getConstUTF8(this.nameIndex).val;
+    }
+
+    public String descriptor() {
+        return getConstUTF8(this.descriptorIndex).val;
+    }
+
+
+    public ConstantInfoType.ConstantUtf8Info getConstUTF8(int index){
+        return (ConstantInfoType.ConstantUtf8Info) constantPool[index];
+    }
 
 }

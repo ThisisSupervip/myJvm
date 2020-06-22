@@ -52,5 +52,13 @@ public class LocalVariables {
         return byteBuffer.getDouble(bufferIdx);
     }
 
+    public void setRef(int index, Object ref) {
+
+    }
+
+    public Object getRef(int index) {
+        return null;
+    }
+
 
 }
