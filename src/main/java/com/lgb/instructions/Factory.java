@@ -183,52 +183,52 @@ public class Factory {
         opcodeMap.put((byte) 0x7d, new LUSHR());
         opcodeMap.put((byte) 0x7e, new IAND());
         opcodeMap.put((byte) 0x7f, new LAND());
-        opcodeMap.put((byte) (byte) 0x80, new IOR());
-        opcodeMap.put((byte) (byte) 0x81, new LOR());
-        opcodeMap.put((byte) (byte) 0x82, new IXOR());
-        opcodeMap.put((byte) (byte) 0x83, new LXOR());
-        opcodeMap.put((byte) (byte) 0x84, new IINC());
-        opcodeMap.put((byte) (byte) 0x85, new I2L());
-        opcodeMap.put((byte) (byte) 0x86, new I2F());
-        opcodeMap.put((byte) (byte) 0x87, new I2D());
-        opcodeMap.put((byte) (byte) 0x88, new L2I());
-        opcodeMap.put((byte) (byte) 0x89, new L2F());
-        opcodeMap.put((byte) (byte) 0x8a, new L2D());
-        opcodeMap.put((byte) (byte) 0x8b, new F2I());
-        opcodeMap.put((byte) (byte) 0x8c, new F2L());
-        opcodeMap.put((byte) (byte) 0x8d, new F2D());
-        opcodeMap.put((byte) (byte) 0x8e, new D2I());
-        opcodeMap.put((byte) (byte) 0x8f, new D2L());
-        opcodeMap.put((byte) (byte) 0x90, new D2F());
-        opcodeMap.put((byte) (byte) 0x91, new I2B());
-        opcodeMap.put((byte) (byte) 0x92, new I2C());
-        opcodeMap.put((byte) (byte) 0x93, new I2S());
-        opcodeMap.put((byte) (byte) 0x94, new LCMP());
-        opcodeMap.put((byte) (byte) 0x95, new FCMPL());
-        opcodeMap.put((byte) (byte) 0x96, new FCMPG());
-        opcodeMap.put((byte) (byte) 0x97, new DCMPL());
-        opcodeMap.put((byte) (byte) 0x98, new DCMPG());
-        opcodeMap.put((byte) (byte) 0x99, new IFEQ());
-        opcodeMap.put((byte) (byte) 0x9a, new IFNE());
-        opcodeMap.put((byte) (byte) 0x9b, new IFLT());
-        opcodeMap.put((byte) (byte) 0x9c, new IFGE());
-        opcodeMap.put((byte) (byte) 0x9d, new IFGT());
-        opcodeMap.put((byte) (byte) 0x9e, new IFLE());
-        opcodeMap.put((byte) (byte) 0x9f, new IF_ICMPEQ());
-        opcodeMap.put((byte) (byte) 0xa0, new IF_ICMPNE());
-        opcodeMap.put((byte) (byte) 0xa1, new IF_ICMPLT());
-        opcodeMap.put((byte) (byte) 0xa2, new IF_ICMPGE());
-        opcodeMap.put((byte) (byte) 0xa3, new IF_ICMPGT());
-        opcodeMap.put((byte) (byte) 0xa4, new IF_ICMPLE());
-        opcodeMap.put((byte) (byte) 0xa5, new IF_ACMPEQ());
-        opcodeMap.put((byte) (byte) 0xa6, new IF_ACMPNE());
-        opcodeMap.put((byte) (byte) 0xa7, new GOTO());
+        opcodeMap.put((byte) 0x80, new IOR());
+        opcodeMap.put((byte) 0x81, new LOR());
+        opcodeMap.put((byte) 0x82, new IXOR());
+        opcodeMap.put((byte) 0x83, new LXOR());
+        opcodeMap.put((byte) 0x84, new IINC());
+        opcodeMap.put((byte) 0x85, new I2L());
+        opcodeMap.put((byte) 0x86, new I2F());
+        opcodeMap.put((byte) 0x87, new I2D());
+        opcodeMap.put((byte) 0x88, new L2I());
+        opcodeMap.put((byte) 0x89, new L2F());
+        opcodeMap.put((byte) 0x8a, new L2D());
+        opcodeMap.put((byte) 0x8b, new F2I());
+        opcodeMap.put((byte) 0x8c, new F2L());
+        opcodeMap.put((byte) 0x8d, new F2D());
+        opcodeMap.put((byte) 0x8e, new D2I());
+        opcodeMap.put((byte) 0x8f, new D2L());
+        opcodeMap.put((byte) 0x90, new D2F());
+        opcodeMap.put((byte) 0x91, new I2B());
+        opcodeMap.put((byte) 0x92, new I2C());
+        opcodeMap.put((byte) 0x93, new I2S());
+        opcodeMap.put((byte) 0x94, new LCMP());
+        opcodeMap.put((byte) 0x95, new FCMPL());
+        opcodeMap.put((byte) 0x96, new FCMPG());
+        opcodeMap.put((byte) 0x97, new DCMPL());
+        opcodeMap.put((byte) 0x98, new DCMPG());
+        opcodeMap.put((byte) 0x99, new IFEQ());
+        opcodeMap.put((byte) 0x9a, new IFNE());
+        opcodeMap.put((byte) 0x9b, new IFLT());
+        opcodeMap.put((byte) 0x9c, new IFGE());
+        opcodeMap.put((byte) 0x9d, new IFGT());
+        opcodeMap.put((byte) 0x9e, new IFLE());
+        opcodeMap.put((byte) 0x9f, new IF_ICMPEQ());
+        opcodeMap.put((byte) 0xa0, new IF_ICMPNE());
+        opcodeMap.put((byte) 0xa1, new IF_ICMPLT());
+        opcodeMap.put((byte) 0xa2, new IF_ICMPGE());
+        opcodeMap.put((byte) 0xa3, new IF_ICMPGT());
+        opcodeMap.put((byte) 0xa4, new IF_ICMPLE());
+        opcodeMap.put((byte) 0xa5, new IF_ACMPEQ());
+        opcodeMap.put((byte) 0xa6, new IF_ACMPNE());
+        opcodeMap.put((byte) 0xa7, new GOTO());
         //opcodeMap.put((byte) 0xa8:
         // 	return &JSR{}
         //opcodeMap.put((byte) 0xa9:
         // 	return &RET{}
-        opcodeMap.put((byte) (byte) 0xaa, new TABLE_SWITCH());
-        opcodeMap.put((byte) (byte) 0xab, new LOOKUP_SWITCH());
+        opcodeMap.put((byte) 0xaa, new TABLE_SWITCH());
+        opcodeMap.put((byte) 0xab, new LOOKUP_SWITCH());
         //opcodeMap.put((byte) 0xac:
         // 	return ireturn
         //opcodeMap.put((byte) 0xad:
@@ -277,12 +277,12 @@ public class Factory {
         // 	return monitorenter
         //opcodeMap.put((byte) 0xc3:
         // 	return monitorexit
-        opcodeMap.put((byte) (byte) 0xc4, new WIDE());
+        opcodeMap.put((byte) 0xc4, new WIDE());
         //opcodeMap.put((byte) 0xc5:
         // 	return &MULTI_ANEW_ARRAY{}
-        opcodeMap.put((byte) (byte) 0xc6, new IFNULL());
-        opcodeMap.put((byte) (byte) 0xc7, new IFNONNULL());
-        opcodeMap.put((byte) (byte) 0xc8, new GOTO_W());
+        opcodeMap.put((byte) 0xc6, new IFNULL());
+        opcodeMap.put((byte) 0xc7, new IFNONNULL());
+        opcodeMap.put((byte) 0xc8, new GOTO_W());
         //opcodeMap.put((byte) 0xc9:
         // 	return &JSR_W{}
         //opcodeMap.put((byte) 0xca: breakpoint
