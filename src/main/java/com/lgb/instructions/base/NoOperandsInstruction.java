@@ -33,4 +33,8 @@ public abstract class NoOperandsInstruction implements Instruction {
         frame.localVariables.setLong(idx, val);
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }

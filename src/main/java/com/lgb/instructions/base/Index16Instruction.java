@@ -12,4 +12,11 @@ public abstract class Index16Instruction implements Instruction {
         index = reader.readUint16();
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{" +
+                "index=" + index +
+                '}';
+    }
+
 }

@@ -30,4 +30,12 @@ public class IINC implements Instruction {
     public void setConst(int constVal) {
         this.constVal = constVal;
     }
+
+    @Override
+    public String toString() {
+        return "IINC{" +
+                "index=" + index +
+                ", constVal=" + constVal +
+                '}';
+    }
 }

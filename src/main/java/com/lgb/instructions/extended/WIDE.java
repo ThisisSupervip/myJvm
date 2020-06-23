@@ -90,4 +90,11 @@ public class WIDE implements Instruction {
     public void execute(Frame frame) {
         this.modifiedInstruction.execute(frame);
     }
+
+    @Override
+    public String toString() {
+        return "WIDE{" +
+                "modifiedInstruction=" + modifiedInstruction +
+                '}';
+    }
 }

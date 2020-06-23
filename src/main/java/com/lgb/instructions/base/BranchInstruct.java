@@ -10,9 +10,17 @@ public abstract class BranchInstruct implements Instruction {
         offset = reader.readInt16();
     }
 
-    public static void branch(Frame frame, int offset){
+    public static void branch(Frame frame, int offset) {
         int pc = frame.thread.pc();
         int nextPc = pc + offset;
         frame.setNextPC(nextPc);
+    }
+
+
+    @Override
+    public String toString() {
+        return "BranchInstruct{" +
+                "offset=" + offset +
+                '}';
     }
 }

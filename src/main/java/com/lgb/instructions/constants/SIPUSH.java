@@ -16,4 +16,11 @@ public class SIPUSH implements Instruction {
     public void execute(Frame frame) {
         frame.operandStack.pushInt(val);
     }
+
+    @Override
+    public String toString() {
+        return "SIPUSH{" +
+                "val=" + val +
+                '}';
+    }
 }

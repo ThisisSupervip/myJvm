@@ -1,6 +1,5 @@
 package com.lgb.instructions.base;
 
-import com.lgb.classfile.fundamental.U1;
 import com.lgb.rtda.Frame;
 
 public abstract class Index8Instruction implements Instruction {
@@ -29,5 +28,12 @@ public abstract class Index8Instruction implements Instruction {
     protected void _istore(Frame frame, int idx) {
         int val = frame.operandStack.popInt();
         frame.localVariables.setInt(idx, val);
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{" +
+                "index=" + index +
+                '}';
     }
 }

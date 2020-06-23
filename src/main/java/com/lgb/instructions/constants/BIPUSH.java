@@ -16,4 +16,11 @@ public class BIPUSH implements Instruction {
     public void execute(Frame frame) {
         frame.operandStack.pushInt(val);
     }
+
+    @Override
+    public String toString() {
+        return "BIPUSH{" +
+                "val=" + val +
+                '}';
+    }
 }

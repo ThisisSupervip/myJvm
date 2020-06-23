@@ -61,4 +61,7 @@ public class LocalVariables {
     }
 
 
+    public byte[] byteArray(){
+        return byteBuffer.array();
+    }
 }
