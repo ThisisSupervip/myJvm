@@ -1,6 +1,7 @@
 package com.lgb.instructions.base;
 
 import com.lgb.rtda.Frame;
+import com.lgb.rtda.heap.methodarea.Object;
 
 public abstract class Index8Instruction implements Instruction {
 

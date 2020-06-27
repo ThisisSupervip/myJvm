@@ -3,6 +3,8 @@ import com.lgb.JVM;
 import com.lgb.classfile.ClassFile;
 import com.lgb.classfile.fundamental.MemberInfo;
 import com.lgb.classpath.Classpath;
+import com.lgb.rtda.heap.methodarea.Class;
+import com.lgb.rtda.heap.methodarea.Method;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,9 +21,9 @@ class TestJVMTest {
 
    @Test
    public void test_interpreter(){
-      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\classes");
-      ClassFile classFile = JVM.loadClass("GaussTest", classpath);
-      MemberInfo mainMethod = JVM.getMainMethod(classFile);
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
+      Class clazz = JVM.loadClass("jvmgo.book.ch06.MyObject", classpath);
+      Method mainMethod = JVM.getMainMethod(clazz);
       Interpreter.interpret(mainMethod);
    }
 

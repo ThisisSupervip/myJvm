@@ -1,12 +1,14 @@
 package com.lgb.rtda;
 
+import com.lgb.rtda.heap.methodarea.Object;
+import lombok.Getter;
+
 import java.nio.ByteBuffer;
 
 public class OperandStack {
     private ByteBuffer byteBuffer;
     private int size;
     private int maxSize;
-
     public OperandStack(int maxStack) {
         this.size = 0;
         this.maxSize = maxStack;
@@ -65,21 +67,27 @@ public class OperandStack {
     }
 
     public void pushRef(Object ref) {
-
+        int add = Memory.add(ref);
+        this.byteBuffer.putInt(size*4, add);
+        size++;
     }
 
     public Object popRef(){
-        return null;
+        size--;
+        int anInt = this.byteBuffer.getInt(size * 4);
+        Object res = Memory.objects.get(anInt);
+        this.byteBuffer.putInt(size*4, 0);
+        return res;
     }
 
     public void pushSlot(byte slot) {
-        this.byteBuffer.putInt(slot);
+        this.byteBuffer.putInt(size*4, slot);
         this.size++;
     }
 
     public byte popSlot(){
         this.size--;
-        return this.byteBuffer.get(size);
+        return (byte) this.byteBuffer.getInt(size*4);
     }
 
     public byte[] byteArray(){

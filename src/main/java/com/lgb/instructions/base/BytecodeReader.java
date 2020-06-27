@@ -35,7 +35,7 @@ public class BytecodeReader {
     }
 
     public U2 readUint16() {
-        byte[] i = Arrays.copyOfRange(code, pc, pc + 1);
+        byte[] i = Arrays.copyOfRange(code, pc, pc + 2);
         pc += 2;
         return new U2(i);
     }

@@ -29,6 +29,10 @@ public class U4 {
         return ByteBuffer.wrap(value).getInt();
     }
 
+    public float toFloat(){
+        return ByteBuffer.wrap(value).getFloat();
+    }
+
     @Override
     public int hashCode() {
         return Arrays.hashCode(value);

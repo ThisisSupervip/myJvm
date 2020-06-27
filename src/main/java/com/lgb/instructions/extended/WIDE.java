@@ -3,6 +3,7 @@ package com.lgb.instructions.extended;
 import com.lgb.instructions.base.BytecodeReader;
 import com.lgb.instructions.base.Instruction;
 import com.lgb.instructions.loads.*;
+import com.lgb.instructions.loads.ALOAD;
 import com.lgb.instructions.math.IINC;
 import com.lgb.instructions.stores.*;
 import com.lgb.rtda.Frame;

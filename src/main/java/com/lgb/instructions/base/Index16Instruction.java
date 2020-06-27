@@ -5,11 +5,11 @@ import com.lgb.rtda.Frame;
 
 public abstract class Index16Instruction implements Instruction {
 
-    private U2 index;
+    protected int index;
 
     @Override
     public void fetchOperands(BytecodeReader reader) {
-        index = reader.readUint16();
+        index = reader.readUint16().intValue;
     }
 
     @Override

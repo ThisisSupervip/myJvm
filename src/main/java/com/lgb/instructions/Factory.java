@@ -9,6 +9,8 @@ import com.lgb.instructions.comparisons.dcmp.*;
 import com.lgb.instructions.comparisons.ifcond.*;
 import com.lgb.instructions.constants.*;
 import com.lgb.instructions.loads.*;
+import com.lgb.instructions.loads.DLOAD_1;
+import com.lgb.instructions.loads.DLOAD_2;
 import com.lgb.instructions.math.or.*;
 import com.lgb.instructions.math.and.*;
 import com.lgb.instructions.math.xor.*;
@@ -20,6 +22,7 @@ import com.lgb.instructions.math.neg.*;
 import com.lgb.instructions.math.rem.*;
 import com.lgb.instructions.math.sub.*;
 import com.lgb.instructions.math.IINC;
+import com.lgb.instructions.references.*;
 import com.lgb.instructions.stack.*;
 import com.lgb.instructions.conversions.d2x.*;
 import com.lgb.instructions.conversions.f2x.*;
@@ -54,12 +57,9 @@ public class Factory {
         opcodeMap.put((byte) 0x0f, new DCONST_1());
         opcodeMap.put((byte) 0x10, new BIPUSH());
         opcodeMap.put((byte) 0x11, new SIPUSH());
-        //opcodeMap.put((byte) 0x12:
-        // 	return &LDC{}
-        //opcodeMap.put((byte) 0x13:
-        // 	return &LDC_W{}
-        //opcodeMap.put((byte) 0x14:
-        // 	return &LDC2_W{}
+        opcodeMap.put((byte) 0x12, new LDC());
+        opcodeMap.put((byte) 0x13, new LDC_W());
+        opcodeMap.put((byte) 0x14, new LDC2_W());
         opcodeMap.put((byte) 0x15, new ILOAD());
         opcodeMap.put((byte) 0x16, new LLOAD());
         opcodeMap.put((byte) 0x17, new FLOAD());
@@ -241,16 +241,12 @@ public class Factory {
         // 	return areturn
         //opcodeMap.put((byte) 0xb1:
         // 	return _return
-        //opcodeMap.put((byte) 0xb2:
-        //		return &GET_STATIC{}
-        //opcodeMap.put((byte) 0xb3:
-        // 	return &PUT_STATIC{}
-        //opcodeMap.put((byte) 0xb4:
-        // 	return &GET_FIELD{}
-        //opcodeMap.put((byte) 0xb5:
-        // 	return &PUT_FIELD{}
-        //opcodeMap.put((byte) 0xb6:
-        //		return &INVOKE_VIRTUAL{}
+        opcodeMap.put((byte) 0xb2, new GET_STATIC());
+        opcodeMap.put((byte) 0xb3, new PUT_STATIC());
+        opcodeMap.put((byte) 0xb4, new GET_FIELD());
+        opcodeMap.put((byte) 0xb5, new PUT_FIELD());
+        opcodeMap.put((byte) 0xb6, new INVOKE_VIRTUAL());
+        opcodeMap.put((byte) 0xb7, new INVOKE_SPECIAL());
         //opcodeMap.put((byte) 0xb7:
         // 	return &INVOKE_SPECIAL{}
         //opcodeMap.put((byte) 0xb8:
@@ -259,8 +255,7 @@ public class Factory {
         // 	return &INVOKE_INTERFACE{}
         //opcodeMap.put((byte) 0xba:
         // 	return &INVOKE_DYNAMIC{}
-        //opcodeMap.put((byte) 0xbb:
-        // 	return &NEW{}
+        opcodeMap.put((byte) 0xbb, new NEW());
         //opcodeMap.put((byte) 0xbc:
         // 	return &NEW_ARRAY{}
         //opcodeMap.put((byte) 0xbd:
@@ -269,10 +264,8 @@ public class Factory {
         // 	return arraylength
         //opcodeMap.put((byte) 0xbf:
         // 	return athrow
-        //opcodeMap.put((byte) 0xc0:
-        // 	return &CHECK_CAST{}
-        //opcodeMap.put((byte) 0xc1:
-        // 	return &INSTANCE_OF{}
+        opcodeMap.put((byte) 0xc0, new CHECK_CAST());
+        opcodeMap.put((byte) 0xc1, new INSTANCE_OF());
         //opcodeMap.put((byte) 0xc2:
         // 	return monitorenter
         //opcodeMap.put((byte) 0xc3:

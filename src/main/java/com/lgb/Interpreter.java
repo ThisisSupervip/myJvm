@@ -8,19 +8,21 @@ import com.lgb.instructions.base.BranchInstruct1;
 import com.lgb.instructions.base.BytecodeReader;
 import com.lgb.instructions.base.Instruction;
 import com.lgb.rtda.Frame;
+import com.lgb.rtda.Memory;
 import com.lgb.rtda.Thread;
+import com.lgb.rtda.heap.methodarea.Method;
+import com.lgb.rtda.heap.methodarea.Object;
 import com.lgb.util.ByteUtil;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Interpreter {
-    public static void interpret(MemberInfo memberInfo){
-        AttributeInfoType.CodeAttribute codeAttr = memberInfo.codeAttribute();
-        int maxLocals = codeAttr.maxLocals.intValue;
-        int maxStack = codeAttr.maxStack.intValue;
-        byte[] bytecode = codeAttr.code;
+    public static void interpret(Method method){
         Thread thread = new Thread();
-        Frame frame = thread.newFrame(maxLocals, maxStack);
+        Frame frame = thread.newFrame(method);
         thread.pushFrame(frame);
-        loop(thread, bytecode);
+        loop(thread, method.code);
     }
 
     public static void loop(Thread thread, byte[] bytecode) {
@@ -46,7 +48,8 @@ public class Interpreter {
             String localVarHax = ByteUtil.hexDump(frame.localVariables.byteArray());
             String operandStackHax = ByteUtil.hexDump(frame.operandStack.byteArray());
             System.out.printf("localVarHax: %s", localVarHax);
-            System.out.printf("operandStackHax: %s\n", operandStackHax);
+            System.out.printf("operandStackHax: %s", operandStackHax);
+            System.out.printf("Objects: %s\n", Arrays.toString(Memory.objects.toArray()));
             /*try {
                 java.lang.Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -55,6 +58,5 @@ public class Interpreter {
         }
 
     }
-
 
 }

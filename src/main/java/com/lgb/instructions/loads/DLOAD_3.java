@@ -8,7 +8,7 @@ public class DLOAD_3 extends NoOperandsInstruction {
     @Override
     public void execute(Frame frame) {
         double val = frame.localVariables.getDouble(3);
-        frame.operandStack.pushRef(val);
+        frame.operandStack.pushDouble(val);
     }
 
 }

@@ -41,4 +41,11 @@ public class MemberInfo {
         return (ConstantInfoType.ConstantUtf8Info) constantPool[index];
     }
 
+    public AttributeInfoType.ConstantValueAttribute getConstantValueAttribute() {
+        for (AttributeInfo attrInfo : attributeInfos) {
+            if (attrInfo instanceof AttributeInfoType.ConstantValueAttribute) return (AttributeInfoType.ConstantValueAttribute) attrInfo;
+        }
+        return null;
+    }
+
 }

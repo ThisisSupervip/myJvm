@@ -2,6 +2,7 @@ package com.lgb.classfile;
 
 import com.lgb.classfile.fundamental.*;
 import com.sun.org.apache.bcel.internal.classfile.ClassFormatException;
+import lombok.Getter;
 
 
 public class ClassFile {
@@ -10,13 +11,21 @@ public class ClassFile {
     private U4 magic;
     private U2 minorVersion;
     private U2 majorVersion;
+    @Getter
     private ConstantInfo[] constantPool;
+    @Getter
     private U2 accessFlags;
+    @Getter
     private U2 thisClass;
+    @Getter
     private U2 superClass;
+    @Getter
     private U2[] interfaces;
+    @Getter
     private MemberInfo[] fields;
+    @Getter
     private MemberInfo[] methods;
+    @Getter
     private AttributeInfo[] attributes;
 
     public ClassFile(byte[] classData){
@@ -96,4 +105,5 @@ public class ClassFile {
     public ConstantInfo[] getConstantPool() {
         return constantPool;
     }
+
 }

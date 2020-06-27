@@ -1,7 +1,13 @@
 package com.lgb.classfile.fundamental;
 
 import com.lgb.classfile.ClassReader;
+import com.lgb.rtda.heap.methodarea.Object;
 import com.sun.org.apache.bcel.internal.classfile.ClassFormatException;
+
+import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class ConstantInfoType {
 
@@ -22,24 +28,34 @@ public class ConstantInfoType {
     public static final int CONSTANT_MethodType = 16;
     public static final int CONSTANT_InvokeDynamic = 18;
 
-    public static class ConstantIntegerInfo implements ConstantInfo{
+    public static class ConstantIntegerInfo implements ConstantNumberInfo {
         public final U4 bytes;
 
         public ConstantIntegerInfo(U4 bytes) {
             this.bytes = bytes;
         }
+
+        @Override
+        public Number getValue() {
+            return bytes.toInt();
+        }
     }
 
-    public static class ConstantFloatInfo implements ConstantInfo{
+    public static class ConstantFloatInfo implements ConstantNumberInfo {
 
         public final U4 bytes;
 
         public ConstantFloatInfo(U4 bytes) {
             this.bytes = bytes;
         }
+
+        @Override
+        public Number getValue() {
+            return bytes.toFloat();
+        }
     }
 
-    public static class ConstantLongInfo implements ConstantInfo{
+    public static class ConstantLongInfo implements ConstantNumberInfo {
 
         public final U4 highBytes;
         public final U4 lowBytes;
@@ -48,9 +64,17 @@ public class ConstantInfoType {
             this.highBytes = highBytes;
             this.lowBytes = lowBytes;
         }
+
+        @Override
+        public Number getValue() {
+            ByteBuffer byteBuffer = ByteBuffer.allocate(8);
+            byteBuffer.put(highBytes.value);
+            byteBuffer.put(lowBytes.value, 4, 4);
+            return byteBuffer.getLong();
+        }
     }
 
-    public static class ConstantDoubleInfo implements ConstantInfo{
+    public static class ConstantDoubleInfo implements ConstantNumberInfo {
 
         public final U4 highBytes;
         public final U4 lowBytes;
@@ -58,6 +82,14 @@ public class ConstantInfoType {
         public ConstantDoubleInfo(U4 highBytes, U4 lowBytes) {
             this.highBytes = highBytes;
             this.lowBytes = lowBytes;
+        }
+
+        @Override
+        public Number getValue() {
+            ByteBuffer byteBuffer = ByteBuffer.allocate(8);
+            byteBuffer.put(highBytes.value);
+            byteBuffer.put(lowBytes.value, 4, 4);
+            return byteBuffer.getDouble();
         }
     }
 
@@ -76,45 +108,99 @@ public class ConstantInfoType {
 
     public static class ConstantStringInfo implements ConstantInfo{
         public final int stringIndex;
+        private final ConstantInfo[] constantPool;
+        private String stringVal;
 
-        public ConstantStringInfo(int stringIndex) {
+        public ConstantStringInfo(int stringIndex, ConstantInfo[] constantPool) {
             this.stringIndex = stringIndex;
+            this.constantPool = constantPool;
+        }
+
+        public String getStringVal(){
+            if(Objects.isNull(stringVal)) {
+                this.stringVal = ((ConstantUtf8Info) this.constantPool[this.stringIndex]).val;
+            }
+            return stringVal;
         }
     }
 
     public static class ConstantClassInfo implements ConstantInfo{
         public final int nameIndex;
+        private final ConstantInfo[] constantPool;
+        private String name;
 
-        public ConstantClassInfo(int nameIndex) {
+        public ConstantClassInfo(int nameIndex, ConstantInfo[] constantPool) {
             this.nameIndex = nameIndex;
+            this.constantPool = constantPool;
+        }
+
+        public String getName(){
+            if(Objects.isNull(this.name)) {
+                this.name = ((ConstantUtf8Info) this.constantPool[this.nameIndex]).val;
+            }
+            return this.name;
         }
     }
 
     public static class ConstantMemberRefInfo implements ConstantInfo{
         public final int classIndex;
         public final int nameAndTypeIndex;
+        protected final ConstantInfo[] constantPool;
+        private String name;
+        private String descriptor;
 
-        public ConstantMemberRefInfo(int classIndex, int nameAndTypeIndex) {
+        public ConstantMemberRefInfo(int classIndex, int nameAndTypeIndex, ConstantInfo[] constantPool) {
             this.classIndex = classIndex;
             this.nameAndTypeIndex = nameAndTypeIndex;
+            this.constantPool = constantPool;
+        }
+
+        public String className() {
+            ConstantClassInfo constantClassInfo = (ConstantClassInfo) constantPool[classIndex];
+            return getUTF8String(constantClassInfo.nameIndex);
+        }
+
+        private void setNameAndDescriptor() {
+            ConstantNameAndTypeInfo constantInfo = (ConstantNameAndTypeInfo) this.constantPool[nameAndTypeIndex];
+            Map<String, String> res = new HashMap<>();
+            this.name = this.getUTF8String(constantInfo.nameIndex);
+            this.descriptor = this.getUTF8String(constantInfo.descriptorIndex);
+        }
+
+        private String getUTF8String(int index){
+            return ((ConstantUtf8Info)this.constantPool[index]).val;
+        }
+
+        public String getName() {
+            if(Objects.isNull(this.name)) {
+                setNameAndDescriptor();
+            }
+            return name;
+        }
+
+        public String getDescriptor() {
+            if(Objects.isNull(this.descriptor)) {
+                setNameAndDescriptor();
+            }
+            return descriptor;
         }
     }
 
     public static class ConstantFieldRefInfo extends ConstantMemberRefInfo{
-        public ConstantFieldRefInfo(int classIndex, int nameAndTypeIndex) {
-            super(classIndex, nameAndTypeIndex);
+        public ConstantFieldRefInfo(int classIndex, int nameAndTypeIndex, ConstantInfo[] constantPool) {
+            super(classIndex, nameAndTypeIndex, constantPool);
         }
     }
 
     public static class ConstantMethodRefInfo extends ConstantMemberRefInfo{
-        public ConstantMethodRefInfo(int classIndex, int nameAndTypeIndex) {
-            super(classIndex, nameAndTypeIndex);
+        public ConstantMethodRefInfo(int classIndex, int nameAndTypeIndex, ConstantInfo[] constantPool) {
+            super(classIndex, nameAndTypeIndex, constantPool);
         }
     }
 
     public static class ConstantInterfaceMethodRefInfo extends ConstantMemberRefInfo{
-        public ConstantInterfaceMethodRefInfo(int classIndex, int nameAndTypeIndex) {
-            super(classIndex, nameAndTypeIndex);
+        public ConstantInterfaceMethodRefInfo(int classIndex, int nameAndTypeIndex, ConstantInfo[] constantPool) {
+            super(classIndex, nameAndTypeIndex, constantPool);
         }
     }
 
@@ -156,7 +242,7 @@ public class ConstantInfoType {
         }
     }
 
-    private static ConstantInfo processConstantInfo(int tag, ClassReader classReader){
+    private static ConstantInfo processConstantInfo(int tag, ClassReader classReader, ConstantInfo[] constantPool){
         switch (tag){
             case CONSTANT_Integer:
                 return new ConstantIntegerInfo(classReader.readU4());
@@ -171,15 +257,15 @@ public class ConstantInfoType {
                 int length = lengthByte.intValue;
                 return new ConstantUtf8Info(lengthByte, classReader.readBytes(length));
             case CONSTANT_String:
-                return new ConstantStringInfo(classReader.readU2Int());
+                return new ConstantStringInfo(classReader.readU2Int(), constantPool);
             case CONSTANT_Class:
-                return new ConstantClassInfo(classReader.readU2Int());
+                return new ConstantClassInfo(classReader.readU2Int(), constantPool);
             case CONSTANT_Fieldref:
-                return new ConstantFieldRefInfo(classReader.readU2Int(), classReader.readU2Int());
+                return new ConstantFieldRefInfo(classReader.readU2Int(), classReader.readU2Int(), constantPool);
             case CONSTANT_Methodref:
-                return new ConstantMemberRefInfo(classReader.readU2Int(), classReader.readU2Int());
+                return new ConstantMethodRefInfo(classReader.readU2Int(), classReader.readU2Int(), constantPool);
             case CONSTANT_InterfaceMethodref:
-                return new ConstantInterfaceMethodRefInfo(classReader.readU2Int(), classReader.readU2Int());
+                return new ConstantInterfaceMethodRefInfo(classReader.readU2Int(), classReader.readU2Int(), constantPool);
             case CONSTANT_NameAndType:
                 return new ConstantNameAndTypeInfo(classReader.readU2Int(), classReader.readU2Int());
             case CONSTANT_MethodType:
@@ -201,7 +287,7 @@ public class ConstantInfoType {
         int i = 1;
         while (i<cpCount){
             int tag = classReader.readU1().toShort();
-            ConstantInfo constantInfo = processConstantInfo(tag, classReader);
+            ConstantInfo constantInfo = processConstantInfo(tag, classReader, res);
             res[i] = constantInfo;
             if(CONSTANT_Double == tag || CONSTANT_Long == tag){
                 i+=2;

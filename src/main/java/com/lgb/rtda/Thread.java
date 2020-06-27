@@ -1,5 +1,7 @@
 package com.lgb.rtda;
 
+import com.lgb.rtda.heap.methodarea.Method;
+
 public class Thread {
     private int pc;
     public final Frame[] stack;
@@ -23,8 +25,8 @@ public class Thread {
         return stack[--stackSize];
     }
 
-    public Frame newFrame(int maxLocals, int maxStack) {
-        return new Frame(maxLocals, maxStack, this);
+    public Frame newFrame(Method method) {
+        return new Frame(this, method);
     }
 
     public void setPC(int pc) {

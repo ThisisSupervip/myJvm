@@ -1,6 +1,7 @@
 package com.lgb.instructions.base;
 
 import com.lgb.rtda.Frame;
+import com.lgb.rtda.Thread;
 
 public class BranchInstruct1 implements Instruction {
     private int offset;
