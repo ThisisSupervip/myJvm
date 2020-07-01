@@ -35,7 +35,7 @@ public class Classloader {
         Class clazz = defineClass(bytes);
         //连接
         link(clazz);
-        System.out.printf("[Loaded class: %s]", name);
+        System.out.printf("[Loaded class: %s]\n", name);
         return clazz;
     }
 
@@ -62,7 +62,7 @@ public class Classloader {
     }
 
     private void resolveSuperClass(Class clazz) {
-        if(Objects.equals(clazz.getName(), "java/lang/Object")) {
+        if(!Objects.equals(clazz.getName(), "java/lang/Object")) {
             clazz.setSuperClass(clazz.getClassloader().loadClass(clazz.getSuperClassName()));
         }
     }

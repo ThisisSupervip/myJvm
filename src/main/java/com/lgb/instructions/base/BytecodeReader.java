@@ -17,6 +17,12 @@ public class BytecodeReader {
         this.pc = pc;
     }
 
+    public byte readByte() {
+        byte code = this.code[this.pc];
+        this.pc++;
+        return code;
+    }
+
     public byte readInt8() {
         byte i = code[pc++];
         return i;

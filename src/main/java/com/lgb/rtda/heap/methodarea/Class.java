@@ -10,6 +10,8 @@ import com.sun.org.apache.bcel.internal.Constants;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 public class Class {
@@ -27,12 +29,13 @@ public class Class {
     private int instanceSlotCount;
     private int staticSlotCount;
     private Slots staticVars;
+    private boolean initStarted;
 
 
     public Class(ClassFile classFile) {
         this.accessFlags = classFile.getAccessFlags().intValue;
         this.constantPool = new ConstantPool(this, classFile);
-        this.name = ((ClassRef)constantPool.getConstant(classFile.getThisClass().intValue)).getClassName();
+        this.name = ((ClassRef) constantPool.getConstant(classFile.getThisClass().intValue)).getClassName();
         parseSuperClassName(classFile);
         parseInterfaceNames(classFile);
         this.fields = Field.newFields(this, classFile.getFields());
@@ -53,6 +56,16 @@ public class Class {
         }
         return false;
     }
+
+    public boolean isSuperClassOf(Class other) {
+        for (Class c = other; c != null; c = c.superClass) {
+            if (c == this) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public boolean isImplements(Class other) {
 
@@ -109,12 +122,15 @@ public class Class {
     }
 
     public Method getStaticMethod(String name, String descriptor) {
-       for(Method m: methods) {
-           if(m.isStatic()&&m.getName().equals(name)&&m.getDescriptor().equals(descriptor)){
-               return m;
-           }
-       }
-       return null;
+        for (Method m : methods) {
+            if(Objects.isNull(m)) {
+                continue;
+            }
+            if (m.isStatic() && m.getName().equals(name) && m.getDescriptor().equals(descriptor)) {
+                return m;
+            }
+        }
+        return null;
     }
 
     private void parseSuperClassName(ClassFile classFile) {
@@ -130,9 +146,25 @@ public class Class {
         U2[] interfaces = classFile.getInterfaces();
         String[] interfaceNames = new String[interfaces.length];
         for (int i = 0; i < interfaces.length; i++) {
-            interfaceNames[i] = (String)this.constantPool.getConstant(interfaces[i].intValue);
+            interfaceNames[i] = ((ClassRef) this.constantPool.getConstant(interfaces[i].intValue)).getClassName();
         }
         this.interfaceNames = interfaceNames;
     }
 
+    public boolean isInitStarted() {
+        return initStarted;
+    }
+
+    public Method getClinitMethod() {
+        return getStaticMethod("<clinit>", "()V");
+    }
+
+    public void startInit() {
+        this.initStarted = true;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

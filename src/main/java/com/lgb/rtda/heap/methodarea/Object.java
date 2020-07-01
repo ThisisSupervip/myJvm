@@ -14,4 +14,11 @@ public class Object {
     public boolean isInstanceOf(Class clazz) {
         return clazz.isAssignableFrom(this.clazz);
     }
+
+    @Override
+    public String toString() {
+        return "Object{" +
+                "clazz=" + clazz +
+                '}';
+    }
 }

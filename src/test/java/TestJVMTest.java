@@ -22,10 +22,11 @@ class TestJVMTest {
    @Test
    public void test_interpreter(){
       Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
-      Class clazz = JVM.loadClass("jvmgo.book.ch06.MyObject", classpath);
+      Class clazz = JVM.loadClass("jvmgo.book.ch07.InvokeDemo", classpath);
       Method mainMethod = JVM.getMainMethod(clazz);
       Interpreter.interpret(mainMethod);
    }
+
 
    public static String bytesToHex(byte[] bytes) {
       StringBuffer sb = new StringBuffer();

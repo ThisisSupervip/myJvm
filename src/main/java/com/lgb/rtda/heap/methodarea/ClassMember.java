@@ -6,13 +6,13 @@ import lombok.Getter;
 import static com.sun.org.apache.bcel.internal.Constants.*;
 
 public class ClassMember {
-    private int accessFlags;
+    protected int accessFlags;
     @Getter
-    private String name;
+    protected String name;
     @Getter
-    private String descriptor;
+    protected String descriptor;
     @Getter
-    private Class clazz;
+    protected Class clazz;
 
     public ClassMember(Class clazz, MemberInfo memberInfo) {
         this.clazz = clazz;

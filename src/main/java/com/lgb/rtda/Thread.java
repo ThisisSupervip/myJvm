@@ -19,12 +19,25 @@ public class Thread {
         stack[stackSize++] = frame;
     }
     public Frame popFrame() {
-        if(stackSize==0){
+        if(isStackEmpty()){
             throw new RuntimeException("jvm stack is empty");
         }
         return stack[--stackSize];
     }
 
+    public Frame currentFrame() {
+        return topFrame();
+    }
+    public Frame topFrame() {
+        if(isStackEmpty()){
+            throw new RuntimeException("jvm stack is empty");
+        }
+        return stack[stackSize-1];
+    }
+
+    public boolean isStackEmpty(){
+        return this.stackSize == 0;
+    }
     public Frame newFrame(Method method) {
         return new Frame(this, method);
     }

@@ -1,5 +1,6 @@
 package com.lgb.instructions.references;
 
+import com.lgb.instructions.base.ClassInitLogic;
 import com.lgb.instructions.base.Index16Instruction;
 import com.lgb.rtda.Frame;
 import com.lgb.rtda.OperandStack;
@@ -20,6 +21,11 @@ public class PUT_STATIC extends Index16Instruction {
         FieldRef fieldRef = (FieldRef) constantPool.getConstant(index);
         Field field = fieldRef.resolvedField();
         Class clazz = field.getClazz();
+        if (!clazz.isInitStarted()) {
+            frame.revertNextPC();
+            ClassInitLogic.initClass(frame.thread, clazz);
+            return;
+        }
         String descriptor = field.getDescriptor();
         int slotId = field.getSlotId();
         Variables slots = clazz.getStaticVars();

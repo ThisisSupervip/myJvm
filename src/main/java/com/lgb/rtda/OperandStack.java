@@ -1,7 +1,6 @@
 package com.lgb.rtda;
 
 import com.lgb.rtda.heap.methodarea.Object;
-import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
@@ -90,7 +89,13 @@ public class OperandStack {
         return (byte) this.byteBuffer.getInt(size*4);
     }
 
+
     public byte[] byteArray(){
         return byteBuffer.array();
+    }
+
+    public Object getRefFromTop(int n) {
+        int anInt = this.byteBuffer.getInt((this.size - 1 - n) * 4);
+        return Memory.objects.get(anInt);
     }
 }

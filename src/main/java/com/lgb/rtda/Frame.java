@@ -14,14 +14,17 @@ public class Frame {
     public Frame(Thread thread, Method method) {
         this.thread = thread;
         this.method = method;
-        this.localVariables = new LocalVariables(method.maxLocals);
-        this.operandStack = new OperandStack(method.maxStack);
+        this.localVariables = new LocalVariables(method.getMaxLocals());
+        this.operandStack = new OperandStack(method.getMaxStack());
     }
 
     public void setNextPC(int nextPC) {
         this.nextPC = nextPC;
     }
 
+    public void revertNextPC() {
+        this.nextPC = this.thread.pc();
+    }
     public int nextPC() {
         return nextPC;
     }

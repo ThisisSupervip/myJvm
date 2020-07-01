@@ -63,6 +63,10 @@ public class Variables {
         return Memory.objects.get(anInt);
     }
 
+    public void setSlot(int index, byte slot) {
+
+    }
+
 
     public byte[] byteArray(){
         return byteBuffer.array();

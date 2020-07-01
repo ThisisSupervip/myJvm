@@ -8,6 +8,7 @@ import com.lgb.instructions.comparisons.fcmpg.*;
 import com.lgb.instructions.comparisons.dcmp.*;
 import com.lgb.instructions.comparisons.ifcond.*;
 import com.lgb.instructions.constants.*;
+import com.lgb.instructions.control.returns.*;
 import com.lgb.instructions.loads.*;
 import com.lgb.instructions.loads.DLOAD_1;
 import com.lgb.instructions.loads.DLOAD_2;
@@ -229,30 +230,20 @@ public class Factory {
         // 	return &RET{}
         opcodeMap.put((byte) 0xaa, new TABLE_SWITCH());
         opcodeMap.put((byte) 0xab, new LOOKUP_SWITCH());
-        //opcodeMap.put((byte) 0xac:
-        // 	return ireturn
-        //opcodeMap.put((byte) 0xad:
-        // 	return lreturn
-        //opcodeMap.put((byte) 0xae:
-        // 	return freturn
-        //opcodeMap.put((byte) 0xaf:
-        // 	return dreturn
-        //opcodeMap.put((byte) 0xb0:
-        // 	return areturn
-        //opcodeMap.put((byte) 0xb1:
-        // 	return _return
+        opcodeMap.put((byte) 0xac, new IRETURN());
+        opcodeMap.put((byte) 0xad, new LRETURN());
+        opcodeMap.put((byte) 0xae, new FRETURN());
+        opcodeMap.put((byte) 0xaf, new DRETURN());
+        opcodeMap.put((byte) 0xb0, new ARETURN());
+        opcodeMap.put((byte) 0xb1, new RETURN());
         opcodeMap.put((byte) 0xb2, new GET_STATIC());
         opcodeMap.put((byte) 0xb3, new PUT_STATIC());
         opcodeMap.put((byte) 0xb4, new GET_FIELD());
         opcodeMap.put((byte) 0xb5, new PUT_FIELD());
         opcodeMap.put((byte) 0xb6, new INVOKE_VIRTUAL());
         opcodeMap.put((byte) 0xb7, new INVOKE_SPECIAL());
-        //opcodeMap.put((byte) 0xb7:
-        // 	return &INVOKE_SPECIAL{}
-        //opcodeMap.put((byte) 0xb8:
-        // 	return &INVOKE_STATIC{}
-        //opcodeMap.put((byte) 0xb9:
-        // 	return &INVOKE_INTERFACE{}
+        opcodeMap.put((byte) 0xb8, new INVOKE_STATIC());
+        opcodeMap.put((byte) 0xb9, new INVOKE_INTERFACE());
         //opcodeMap.put((byte) 0xba:
         // 	return &INVOKE_DYNAMIC{}
         opcodeMap.put((byte) 0xbb, new NEW());
