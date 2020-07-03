@@ -1,6 +1,5 @@
 package com.lgb;
 
-import com.lgb.classfile.ClassFile;
 import com.lgb.classpath.Classpath;
 import com.lgb.rtda.heap.classloader.Classloader;
 import com.lgb.rtda.heap.methodarea.Class;

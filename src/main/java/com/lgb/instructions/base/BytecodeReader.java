@@ -2,6 +2,7 @@ package com.lgb.instructions.base;
 
 import com.lgb.classfile.fundamental.U1;
 import com.lgb.classfile.fundamental.U2;
+import lombok.Getter;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import java.util.Arrays;
 public class BytecodeReader {
     private byte[] code;
     ByteBuffer byteBuffer;
+    @Getter
     private int pc;
 
     public void reset(byte[] code, int pc) {
@@ -66,7 +68,4 @@ public class BytecodeReader {
         }
     }
 
-    public int PC() {
-        return pc;
-    }
 }

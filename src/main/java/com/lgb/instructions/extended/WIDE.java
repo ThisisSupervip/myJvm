@@ -2,10 +2,17 @@ package com.lgb.instructions.extended;
 
 import com.lgb.instructions.base.BytecodeReader;
 import com.lgb.instructions.base.Instruction;
-import com.lgb.instructions.loads.*;
-import com.lgb.instructions.loads.ALOAD;
+import com.lgb.instructions.loads.aload.ALOAD;
+import com.lgb.instructions.loads.dload.DLOAD;
+import com.lgb.instructions.loads.fload.FLOAD;
+import com.lgb.instructions.loads.iload.ILOAD;
+import com.lgb.instructions.loads.lload.LLOAD;
 import com.lgb.instructions.math.IINC;
-import com.lgb.instructions.stores.*;
+import com.lgb.instructions.stores.astore.ASTORE;
+import com.lgb.instructions.stores.dstore.DSTORE;
+import com.lgb.instructions.stores.fstore.FSTORE;
+import com.lgb.instructions.stores.istore.ISTORE;
+import com.lgb.instructions.stores.lstore.LSTORE;
 import com.lgb.rtda.Frame;
 
 public class WIDE implements Instruction {

@@ -67,10 +67,11 @@ public class ConstantInfoType {
 
         @Override
         public Number getValue() {
-            ByteBuffer byteBuffer = ByteBuffer.allocate(8);
-            byteBuffer.put(highBytes.value);
-            byteBuffer.put(lowBytes.value, 4, 4);
-            return byteBuffer.getLong();
+            byte[] bytes = new byte[8];
+            System.arraycopy(highBytes.value, 0, bytes, 0, 4);
+            System.arraycopy(lowBytes.value, 0, bytes, 4, 4);
+            ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
+            return byteBuffer.getLong(0);
         }
     }
 

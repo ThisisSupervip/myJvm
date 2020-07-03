@@ -40,7 +40,7 @@ public class PUT_FIELD extends Index16Instruction {
                 if (null == ref) {
                     throw new NullPointerException();
                 }
-                ref.fields.setInt(slotId, val);
+                ref.getFields().setInt(slotId, val);
                 break;
             }
             case "F": {
@@ -49,7 +49,7 @@ public class PUT_FIELD extends Index16Instruction {
                 if (null == ref) {
                     throw new NullPointerException();
                 }
-                ref.fields.setFloat(slotId, val);
+                ref.getFields().setFloat(slotId, val);
                 break;
             }
             case "J": {
@@ -58,7 +58,7 @@ public class PUT_FIELD extends Index16Instruction {
                 if (null == ref) {
                     throw new NullPointerException();
                 }
-                ref.fields.setLong(slotId, val);
+                ref.getFields().setLong(slotId, val);
                 break;
             }
             case "D": {
@@ -67,7 +67,7 @@ public class PUT_FIELD extends Index16Instruction {
                 if (null == ref) {
                     throw new NullPointerException();
                 }
-                ref.fields.setDouble(slotId, val);
+                ref.getFields().setDouble(slotId, val);
                 break;
             }
             case "L":
@@ -77,7 +77,7 @@ public class PUT_FIELD extends Index16Instruction {
                 if (null == ref) {
                     throw new NullPointerException();
                 }
-                ref.fields.setRef(slotId, val);
+                ref.getFields().setRef(slotId, val);
                 break;
             }
             default:

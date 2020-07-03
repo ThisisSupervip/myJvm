@@ -6,10 +6,12 @@ import com.lgb.classfile.fundamental.U2;
 import com.lgb.rtda.heap.classloader.Classloader;
 import com.lgb.rtda.heap.constantPool.ClassRef;
 import com.lgb.rtda.heap.constantPool.ConstantPool;
+import com.lgb.util.ClassNameHelper;
 import com.sun.org.apache.bcel.internal.Constants;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 @Getter
@@ -40,6 +42,15 @@ public class Class {
         parseInterfaceNames(classFile);
         this.fields = Field.newFields(this, classFile.getFields());
         this.methods = Method.newMethods(this, classFile.getMethods());
+    }
+
+    public Class(int accessFlags, String name, Classloader classloader, boolean initStarted, Class superClass, Class[] interfaces) {
+        this.accessFlags = accessFlags;
+        this.name = name;
+        this.classloader = classloader;
+        this.initStarted = initStarted;
+        this.superClass = superClass;
+        this.interfaces = interfaces;
     }
 
     public String getPackageName() {
@@ -88,13 +99,67 @@ public class Class {
         return false;
     }
 
-    public boolean isAssignableFrom(Class other) {
-        if (this == other) return true;
-        if (!other.isInterface()) {
-            return this.isSubClassOf(other);
-        } else {
-            return this.isImplements(other);
+    public Field getField(String name, String descriptor, boolean isStatic) {
+        for (Class c = this; c != null; c = c.superClass) {
+            for (Field field : c.fields) {
+                if (field.isStatic() == isStatic &&
+                        field.name.equals(name) &&
+                        field.descriptor.equals(descriptor)) {
+                    return field;
+                }
+            }
         }
+        return null;
+    }
+
+    public boolean isAssignableFrom(Class other) {
+        Class s = other;
+        Class t = this;
+
+        if (s == t) {
+            return true;
+        }
+
+        if (!s.isArray()) {
+            if (!s.isInterface()) {
+                if (!t.isInterface()) {
+                    return s.isSubClassOf(t);
+                } else {
+                    return s.isImplements(t);
+                }
+            } else {
+                if (!t.isInterface()) {
+                    return t.isJlObject();
+                } else {
+                    return t.isSubInterfaceOf(s);
+                }
+            }
+        } else {
+            if (!t.isArray()) {
+
+                if (!t.isInterface()) {
+                    return t.isJlObject();
+                } else {
+                    return t.isJlCloneable() || t.isJioSerializable();
+                }
+            } else {
+                Class sc = s.componentClass();
+                Class tc = t.componentClass();
+                return sc == tc || tc.isAssignableFrom(sc);
+            }
+        }
+    }
+
+    private boolean isJioSerializable() {
+        return this.name.endsWith("java/io/Serializable");
+    }
+
+    private boolean isJlCloneable() {
+        return this.name.equals("java/lang/Cloneable");
+    }
+
+    private boolean isJlObject() {
+        return this.name.equals("java/lang/Object");
     }
 
     public Object newObject() {
@@ -123,7 +188,7 @@ public class Class {
 
     public Method getStaticMethod(String name, String descriptor) {
         for (Method m : methods) {
-            if(Objects.isNull(m)) {
+            if (Objects.isNull(m)) {
                 continue;
             }
             if (m.isStatic() && m.getName().equals(name) && m.getDescriptor().equals(descriptor)) {
@@ -166,5 +231,45 @@ public class Class {
     @Override
     public String toString() {
         return name;
+    }
+
+    public Class arrayClass() {
+        String arrayClassName = ClassNameHelper.getArrayClassName(this.name);
+        return this.classloader.loadClass(arrayClassName);
+    }
+
+    public boolean isArray() {
+        return this.name.getBytes()[0] == '[';
+    }
+
+    public Object newArray(int count) {
+        if (!this.isArray()) {
+            throw new RuntimeException("Not array class " + this.name);
+        }
+        switch (this.name) {
+            case "[Z":
+                return new Object(this, new byte[count]);
+            case "[B":
+                return new Object(this, new byte[count]);
+            case "[C":
+                return new Object(this, new char[count]);
+            case "[S":
+                return new Object(this, new short[count]);
+            case "[I":
+                return new Object(this, new int[count]);
+            case "[J":
+                return new Object(this, new long[count]);
+            case "[F":
+                return new Object(this, new float[count]);
+            case "[D":
+                return new Object(this, new double[count]);
+            default:
+                return new Object(this, new Object[count]);
+        }
+    }
+
+    public Class componentClass() {
+        String componentClassName = ClassNameHelper.getComponentClassName(this.name);
+        return this.classloader.loadClass(componentClassName);
     }
 }

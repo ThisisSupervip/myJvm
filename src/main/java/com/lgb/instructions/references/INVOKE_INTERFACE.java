@@ -46,4 +46,11 @@ public class INVOKE_INTERFACE implements Instruction {
 
         MethodInvokeLogic.invokeMethod(frame, methodToBeInvoked);
     }
+
+    @Override
+    public String toString() {
+        return "INVOKE_INTERFACE{" +
+                "index=" + index +
+                '}';
+    }
 }

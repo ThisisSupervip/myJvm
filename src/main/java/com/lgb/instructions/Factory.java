@@ -1,5 +1,7 @@
 package com.lgb.instructions;
 
+import com.lgb.instructions.base.BranchInstruct;
+import com.lgb.instructions.base.BranchInstruct1;
 import com.lgb.instructions.control.*;
 import com.lgb.instructions.base.Instruction;
 import com.lgb.instructions.comparisons.if_icmp.*;
@@ -9,9 +11,12 @@ import com.lgb.instructions.comparisons.dcmp.*;
 import com.lgb.instructions.comparisons.ifcond.*;
 import com.lgb.instructions.constants.*;
 import com.lgb.instructions.control.returns.*;
-import com.lgb.instructions.loads.*;
-import com.lgb.instructions.loads.DLOAD_1;
-import com.lgb.instructions.loads.DLOAD_2;
+import com.lgb.instructions.loads.dload.*;
+import com.lgb.instructions.loads.aload.*;
+import com.lgb.instructions.loads.fload.*;
+import com.lgb.instructions.loads.iload.*;
+import com.lgb.instructions.loads.lload.*;
+import com.lgb.instructions.loads.xaload.*;
 import com.lgb.instructions.math.or.*;
 import com.lgb.instructions.math.and.*;
 import com.lgb.instructions.math.xor.*;
@@ -31,7 +36,12 @@ import com.lgb.instructions.conversions.i2x.*;
 import com.lgb.instructions.conversions.l2x.*;
 import com.lgb.instructions.comparisons.LCMP;
 import com.lgb.instructions.extended.*;
-import com.lgb.instructions.stores.*;
+import com.lgb.instructions.stores.astore.*;
+import com.lgb.instructions.stores.dstore.*;
+import com.lgb.instructions.stores.fstore.*;
+import com.lgb.instructions.stores.istore.*;
+import com.lgb.instructions.stores.lstore.*;
+import com.lgb.instructions.stores.xastore.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -86,22 +96,14 @@ public class Factory {
         opcodeMap.put((byte) 0x2b, new ALOAD_1());
         opcodeMap.put((byte) 0x2c, new ALOAD_2());
         opcodeMap.put((byte) 0x2d, new ALOAD_3());
-        //opcodeMap.put((byte) 0x2e:
-        // 	return iaload
-        //opcodeMap.put((byte) 0x2f:
-        // 	return laload
-        //opcodeMap.put((byte) 0x30:
-        // 	return faload
-        //opcodeMap.put((byte) 0x31:
-        // 	return daload
-        //opcodeMap.put((byte) 0x32:
-        // 	return aaload
-        //opcodeMap.put((byte) 0x33:
-        // 	return baload
-        //opcodeMap.put((byte) 0x34:
-        // 	return caload
-        //opcodeMap.put((byte) 0x35:
-        // 	return saload
+        opcodeMap.put((byte) 0x2e, new IALOAD());
+        opcodeMap.put((byte) 0x2f, new LALOAD());
+        opcodeMap.put((byte) 0x30, new FALOAD());
+        opcodeMap.put((byte) 0x31, new DALOAD());
+        opcodeMap.put((byte) 0x32, new AALOAD());
+        opcodeMap.put((byte) 0x33, new BALOAD());
+        opcodeMap.put((byte) 0x34, new CALOAD());
+        opcodeMap.put((byte) 0x35, new SALOAD());
         opcodeMap.put((byte) 0x36, new ISTORE());
         opcodeMap.put((byte) 0x37, new LSTORE());
         opcodeMap.put((byte) 0x38, new FSTORE());
@@ -127,22 +129,14 @@ public class Factory {
         opcodeMap.put((byte) 0x4c, new ASTORE_1());
         opcodeMap.put((byte) 0x4d, new ASTORE_2());
         opcodeMap.put((byte) 0x4e, new ASTORE_3());
-        //opcodeMap.put((byte) 0x4f:
-        // 	return iastore
-        //opcodeMap.put((byte) 0x50:
-        // 	return lastore
-        //opcodeMap.put((byte) 0x51:
-        // 	return fastore
-        //opcodeMap.put((byte) 0x52:
-        // 	return dastore
-        //opcodeMap.put((byte) 0x53:
-        // 	return aastore
-        //opcodeMap.put((byte) 0x54:
-        // 	return bastore
-        //opcodeMap.put((byte) 0x55:
-        // 	return castore
-        //opcodeMap.put((byte) 0x56:
-        // 	return sastore
+        opcodeMap.put((byte) 0x4f, new IASTORE());
+        opcodeMap.put((byte) 0x50, new LASTORE());
+        opcodeMap.put((byte) 0x51, new FASTORE());
+        opcodeMap.put((byte) 0x52, new DASTORE());
+        opcodeMap.put((byte) 0x53, new AASTORE());
+        opcodeMap.put((byte) 0x54, new BASTORE());
+        opcodeMap.put((byte) 0x55, new CASTORE());
+        opcodeMap.put((byte) 0x56, new SASTORE());
         opcodeMap.put((byte) 0x57, new POP());
         opcodeMap.put((byte) 0x58, new POP2());
         opcodeMap.put((byte) 0x59, new DUP());
@@ -247,12 +241,9 @@ public class Factory {
         //opcodeMap.put((byte) 0xba:
         // 	return &INVOKE_DYNAMIC{}
         opcodeMap.put((byte) 0xbb, new NEW());
-        //opcodeMap.put((byte) 0xbc:
-        // 	return &NEW_ARRAY{}
-        //opcodeMap.put((byte) 0xbd:
-        // 	return &ANEW_ARRAY{}
-        //opcodeMap.put((byte) 0xbe:
-        // 	return arraylength
+        opcodeMap.put((byte) 0xbc, new NEW_ARRAY());
+        opcodeMap.put((byte) 0xbd, new ANEW_ARRAY());
+        opcodeMap.put((byte) 0xbe, new ARRAY_LENGTH());
         //opcodeMap.put((byte) 0xbf:
         // 	return athrow
         opcodeMap.put((byte) 0xc0, new CHECK_CAST());
@@ -262,8 +253,7 @@ public class Factory {
         //opcodeMap.put((byte) 0xc3:
         // 	return monitorexit
         opcodeMap.put((byte) 0xc4, new WIDE());
-        //opcodeMap.put((byte) 0xc5:
-        // 	return &MULTI_ANEW_ARRAY{}
+        opcodeMap.put((byte) 0xc5, new MULTI_ANEW_ARRAY());
         opcodeMap.put((byte) 0xc6, new IFNULL());
         opcodeMap.put((byte) 0xc7, new IFNONNULL());
         opcodeMap.put((byte) 0xc8, new GOTO_W());
@@ -276,6 +266,9 @@ public class Factory {
     public static Instruction newInstruction(byte opcode) {
         Instruction inst = null;
         if(Objects.nonNull(inst = opcodeMap.get(opcode))){
+            if(inst instanceof BranchInstruct) {
+                inst = new BranchInstruct1((BranchInstruct) inst);
+            }
             return inst;
         }
         throw new RuntimeException(String.format("Unsupported opcode: %s", Integer.toHexString(opcode)));

@@ -26,7 +26,7 @@ public class GET_FIELD extends Index16Instruction {
         }
         String descriptor = field.getDescriptor();
         int slotId = field.getSlotId();
-        Variables slots = ref.fields;
+        Variables slots = ref.getFields();
 
         switch (descriptor.substring(0, 1)) {
             case "Z":
@@ -34,7 +34,7 @@ public class GET_FIELD extends Index16Instruction {
             case "C":
             case "S":
             case "I":
-                stack.pushInt(ref.fields.getInt(slotId));
+                stack.pushInt(slots.getInt(slotId));
                 break;
             case "F":
                 stack.pushFloat(slots.getFloat(slotId));

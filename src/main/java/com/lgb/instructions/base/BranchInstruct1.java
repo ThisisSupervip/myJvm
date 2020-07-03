@@ -3,6 +3,10 @@ package com.lgb.instructions.base;
 import com.lgb.rtda.Frame;
 import com.lgb.rtda.Thread;
 
+/**
+ * 装饰跳转指令 方便显示跳转信息
+ * @see #toString()
+ */
 public class BranchInstruct1 implements Instruction {
     private int offset;
     private int nextPC;

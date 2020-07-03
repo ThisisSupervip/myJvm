@@ -2,10 +2,13 @@ package com.lgb.rtda.heap.classloader;
 
 import com.lgb.classfile.ClassFile;
 import com.lgb.classpath.Classpath;
+import com.lgb.rtda.heap.StringPool;
 import com.lgb.rtda.heap.constantPool.ConstantPool;
 import com.lgb.rtda.heap.methodarea.Class;
 import com.lgb.rtda.heap.methodarea.Field;
+import com.lgb.rtda.heap.methodarea.Object;
 import com.lgb.rtda.heap.methodarea.Slots;
+import com.sun.org.apache.bcel.internal.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +25,11 @@ public class Classloader {
 
     public Class loadClass(String name) {
         Class res = null;
-        if(Objects.nonNull(res = map.get(name))) {
+        if (Objects.nonNull(res = map.get(name))) {
             return res;
+        }
+        if ('[' == name.getBytes()[0]) {
+            return loadArrayClass(name);
         }
         res = loadNonArrayClass(name);
         return res;
@@ -39,9 +45,20 @@ public class Classloader {
         return clazz;
     }
 
+    private Class loadArrayClass(String name) {
+        Class clazz = new Class(Constants.ACC_PUBLIC,
+                name,
+                this,
+                true,
+                this.loadClass("java/lang/Object"),
+                new Class[]{this.loadClass("java/lang/Cloneable"), this.loadClass("java/io/Serializable")});
+        this.map.put(name, clazz);
+        return clazz;
+    }
+
     private byte[] readClass(String name) {
         byte[] bytes = classpath.readClass(name);
-        if(Objects.isNull(bytes)){
+        if (Objects.isNull(bytes)) {
             throw new RuntimeException("java.lang.ClassNotFoundException: " + name);
         }
         return bytes;
@@ -62,14 +79,14 @@ public class Classloader {
     }
 
     private void resolveSuperClass(Class clazz) {
-        if(!Objects.equals(clazz.getName(), "java/lang/Object")) {
+        if (!Objects.equals(clazz.getName(), "java/lang/Object")) {
             clazz.setSuperClass(clazz.getClassloader().loadClass(clazz.getSuperClassName()));
         }
     }
 
     private void resolveInterface(Class clazz) {
         String[] interfaceNames = clazz.getInterfaceNames();
-        if(interfaceNames.length>0) {
+        if (interfaceNames.length > 0) {
             Class[] interfaces = new Class[interfaceNames.length];
             for (int i = 0; i < interfaceNames.length; i++) {
                 interfaces[i] = clazz.getClassloader().loadClass(interfaceNames[i]);
@@ -127,8 +144,8 @@ public class Classloader {
 
     private void allocAndInitStaticVars(Class clazz) {
         clazz.setStaticVars(new Slots(clazz.getStaticSlotCount()));
-        for (Field field: clazz.getFields()){
-            if(field.isStatic() && field.isFinal()){
+        for (Field field : clazz.getFields()) {
+            if (field.isStatic() && field.isFinal()) {
                 initStaticFinalVar(clazz, field);
             }
         }
@@ -140,8 +157,8 @@ public class Classloader {
         int cpIndex = field.getConstValueIndex();
         String descriptor = field.getDescriptor().substring(0, 1);
         int slotId = field.getSlotId();
-        if(cpIndex>0){
-            switch (descriptor){
+        if (cpIndex > 0) {
+            switch (descriptor) {
                 case "Z":
                 case "B":
                 case "C":
@@ -158,11 +175,11 @@ public class Classloader {
                 case "D":
                     staticVars.setDouble(slotId, (Double) constantPool.getConstant(cpIndex));
                     break;
-                case "L":
-                    //staticVars.setRef(slotId, );
-                /*case "Ljava/lang/String;":
-                    //todo
-                    break;*/
+                case "Ljava/lang/String;":
+                    String str = (String) constantPool.getConstant(cpIndex);
+                    Object jStr = StringPool.jString(clazz.getClassloader(), str);
+                    staticVars.setRef(slotId, jStr);
+                    break;
             }
         }
     }

@@ -24,9 +24,25 @@ class TestJVMTest {
       Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
       Class clazz = JVM.loadClass("jvmgo.book.ch07.InvokeDemo", classpath);
       Method mainMethod = JVM.getMainMethod(clazz);
-      Interpreter.interpret(mainMethod);
+      Interpreter.interpret(mainMethod, new String[]{});
    }
 
+   @Test
+   public void ch08_test_bubble_sort(){
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
+      Class clazz = JVM.loadClass("jvmgo.book.ch08.BubbleSortTest", classpath);
+      Method mainMethod = JVM.getMainMethod(clazz);
+      Interpreter.interpret(mainMethod, new String[]{});
+   }
+
+   @Test
+   public void ch08_print_args() {
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
+      Class clazz = JVM.loadClass("jvmgo.book.ch08.PrintArgs", classpath);
+      Method mainMethod = JVM.getMainMethod(clazz);
+      String[] args = "foo bar 你好，世界".split(" ");
+      Interpreter.interpret(mainMethod, args);
+   }
 
    public static String bytesToHex(byte[] bytes) {
       StringBuffer sb = new StringBuffer();

@@ -5,6 +5,7 @@ import com.lgb.instructions.base.MethodInvokeLogic;
 import com.lgb.rtda.Frame;
 import com.lgb.rtda.OperandStack;
 import com.lgb.rtda.heap.MethodLookup;
+import com.lgb.rtda.heap.StringPool;
 import com.lgb.rtda.heap.constantPool.ConstantPool;
 import com.lgb.rtda.heap.constantPool.MethodRef;
 import com.lgb.rtda.heap.methodarea.Class;
@@ -70,6 +71,11 @@ public class INVOKE_VIRTUAL extends Index16Instruction {
                 break;
             case "(D)V":
                 System.out.println(stack.popDouble());
+                break;
+            case "(Ljava/lang/String;)V":
+                Object jStr = stack.popRef();
+                String goStr = StringPool.goString(jStr);
+                System.out.println(goStr);
                 break;
             default:
                 System.out.println(descriptor);
