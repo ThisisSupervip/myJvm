@@ -9,6 +9,9 @@ public class MethodLookup {
     public static Method lookupMethodInClass(Class clazz, String name, String descriptor) {
         Class c;
         for(c = clazz; c != null; c = c.getSuperClass()) {
+            if(Objects.isNull(c.getMethods())) {
+                continue;
+            }
             for (Method method : c.getMethods()) {
                 if(Objects.isNull(method)) continue;
                 if(method.getName().equals(name) && method.getDescriptor().equals(descriptor)){

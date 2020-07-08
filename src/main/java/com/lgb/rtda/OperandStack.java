@@ -79,14 +79,22 @@ public class OperandStack {
         return res;
     }
 
-    public void pushSlot(byte slot) {
+    public void pushSlot(int slot) {
         this.byteBuffer.putInt(size*4, slot);
         this.size++;
     }
 
-    public byte popSlot(){
+    public int popSlot(){
         this.size--;
-        return (byte) this.byteBuffer.getInt(size*4);
+        return this.byteBuffer.getInt(size*4);
+    }
+
+    public void pushBoolean(boolean val) {
+        if (val) {
+            this.pushInt(1);
+        } else {
+            this.pushInt(0);
+        }
     }
 
 
@@ -96,6 +104,7 @@ public class OperandStack {
 
     public Object getRefFromTop(int n) {
         int anInt = this.byteBuffer.getInt((this.size - 1 - n) * 4);
+
         return Memory.objects.get(anInt);
     }
 }

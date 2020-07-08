@@ -19,13 +19,5 @@ public class MethodInvokeLogic {
             }
         }
 
-        //hack
-        if (method.isNative()) {
-            if ("registerNatives".equals(method.getName())) {
-                thread.popFrame();
-            } else {
-                throw new RuntimeException("native method " + method.getName());
-            }
-        }
     }
 }

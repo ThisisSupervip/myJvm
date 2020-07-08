@@ -51,6 +51,8 @@ public class AttributeInfoType {
                 return new LineNumberTableAttribute(attributeNameIndex, attributeLength, attrName, attrBytes);
             case (LOCAL_VARIABLE_TABLE):
                 return new LocalVariableTableAttribute(attributeNameIndex, attributeLength, attrName, attrBytes);
+            case (SIGNATURE):
+                return new SignatureAttribute(attributeNameIndex, attributeLength, attrName, attrBytes);
             default:
                 return new UnparsedAttribute(attributeNameIndex, attributeLength, attrName, attrBytes);
 
@@ -182,6 +184,18 @@ public class AttributeInfoType {
                 lineNumberTable[i] = new LineNumberTableEntry(startPc, lineNumber);
             }
         }
+    }
+
+    public static class SignatureAttribute extends AttributeInfo {
+
+        public final int signatureIdx;
+
+        public SignatureAttribute(int attributeNameIndex, int attributeLength, String attrName,byte[] attrBytes) {
+            super(attributeNameIndex, attributeLength, attrName);
+            ClassReader classReader = new ClassReader(attrBytes);
+            this.signatureIdx = classReader.readU2().toInt();
+        }
+
     }
 
     public static class LineNumberTableEntry {

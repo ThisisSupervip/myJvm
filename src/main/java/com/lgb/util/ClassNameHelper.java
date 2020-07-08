@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClassNameHelper {
-    static Map<String, String> primitiveTypes = new HashMap<String, String>() {
+    public static Map<String, String> primitiveTypes = new HashMap<String, String>() {
         {
             put("void", "V");
             put("boolean", "Z");

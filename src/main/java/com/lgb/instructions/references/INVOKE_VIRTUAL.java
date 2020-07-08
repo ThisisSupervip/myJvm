@@ -31,6 +31,9 @@ public class INVOKE_VIRTUAL extends Index16Instruction {
                 _println(frame.operandStack, methodRef.getDescriptor());
                 return;
             }
+            /*if("getName".equals(methodRef.getName())) {
+                Registry.findNativeMethod()
+            }*/
             throw new NullPointerException();
         }
 

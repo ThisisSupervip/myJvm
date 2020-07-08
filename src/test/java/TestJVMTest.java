@@ -44,6 +44,38 @@ class TestJVMTest {
       Interpreter.interpret(mainMethod, args);
    }
 
+   @Test
+   public void ch09_getClassTest() {
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
+      Class clazz = JVM.loadClass("jvmgo.book.ch09.GetClassTest", classpath);
+      Method mainMethod = JVM.getMainMethod(clazz);
+      Interpreter.interpret(mainMethod, new String[]{});
+   }
+
+   @Test
+   public void ch09_stringTest() {
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
+      Class clazz = JVM.loadClass("jvmgo.book.ch09.StringTest", classpath);
+      Method mainMethod = JVM.getMainMethod(clazz);
+      Interpreter.interpret(mainMethod, new String[]{});
+   }
+
+   @Test
+   public void ch09_cloneTest() {
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
+      Class clazz = JVM.loadClass("jvmgo.book.ch09.CloneTest", classpath);
+      Method mainMethod = JVM.getMainMethod(clazz);
+      Interpreter.interpret(mainMethod, new String[]{});
+   }
+
+   @Test
+   public void ch09_boxTest() {
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
+      Class clazz = JVM.loadClass("jvmgo.book.ch09.BoxTest", classpath);
+      Method mainMethod = JVM.getMainMethod(clazz);
+      Interpreter.interpret(mainMethod, new String[]{});
+   }
+
    public static String bytesToHex(byte[] bytes) {
       StringBuffer sb = new StringBuffer();
       for(int i = 0; i < bytes.length; i++) {

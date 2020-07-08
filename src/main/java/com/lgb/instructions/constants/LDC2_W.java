@@ -19,6 +19,7 @@ public class LDC2_W extends Index16Instruction {
         }
         if (o instanceof Double){
             stack.pushDouble((Double) o);
+            return;
         }
         throw new ClassFormatError();
     }

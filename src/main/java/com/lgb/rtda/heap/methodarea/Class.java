@@ -25,6 +25,7 @@ public class Class {
     private ConstantPool constantPool;
     private Field[] fields;
     private Method[] methods;
+    @Getter
     private Classloader classloader;
     private Class superClass;
     private Class[] interfaces;
@@ -32,6 +33,9 @@ public class Class {
     private int staticSlotCount;
     private Slots staticVars;
     private boolean initStarted;
+    //指向类对象
+    @Getter @Setter
+    private Object jClass;
 
 
     public Class(ClassFile classFile) {
@@ -51,6 +55,13 @@ public class Class {
         this.initStarted = initStarted;
         this.superClass = superClass;
         this.interfaces = interfaces;
+    }
+
+    public Class(int accessFlags, String name, Classloader classloader, boolean initStarted) {
+        this.accessFlags = accessFlags;
+        this.name = name;
+        this.classloader = classloader;
+        this.initStarted = initStarted;
     }
 
     public String getPackageName() {
@@ -198,6 +209,18 @@ public class Class {
         return null;
     }
 
+    private Method getStaticMethod(String name, String descriptor, boolean isStatic) {
+        for (Class c = this; c != null; c = c.superClass) {
+            if (null == c.methods) continue;
+            for (Method method : c.methods) {
+                if (method.isStatic() == isStatic && method.name.equals(name) && method.descriptor.equals(descriptor)) {
+                    return method;
+                }
+            }
+        }
+        throw new RuntimeException("method not find: " + name + " " + descriptor);
+    }
+
     private void parseSuperClassName(ClassFile classFile) {
         int index = classFile.getSuperClass().intValue;
         if (index <= 0) {
@@ -271,5 +294,22 @@ public class Class {
     public Class componentClass() {
         String componentClassName = ClassNameHelper.getComponentClassName(this.name);
         return this.classloader.loadClass(componentClassName);
+    }
+
+    public String javaName() {
+        return this.name.substring(0, 1) + this.name.substring(1).replace("/", ".");
+    }
+
+    public boolean IsPrimitive() {
+        return null != ClassNameHelper.primitiveTypes.get(this.name);
+    }
+
+    public Object getRefVar(String fieldName, String fieldDescriptor) {
+        Field field = this.getField(fieldName, fieldDescriptor, true);
+        return this.staticVars.getRef(field.getSlotId());
+    }
+
+    public Method getInstanceMethod(String name, String descriptor) {
+        return this.getStaticMethod(name, descriptor, false);
     }
 }

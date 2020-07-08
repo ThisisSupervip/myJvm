@@ -1,10 +1,16 @@
 package com.lgb.rtda.heap.methodarea;
 
 import com.lgb.rtda.LocalVariables;
+import com.lgb.rtda.Variables;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Object {
     public final Class clazz;
-    public final java.lang.Object data;
+    public java.lang.Object data;
+    @Getter
+    @Setter
+    private java.lang.Object extra;
 
     public Object(Class clazz) {
         this.clazz = clazz;
@@ -119,4 +125,28 @@ public class Object {
     }
 
 
+    public Object _clone() {
+        Object res = new Object(this.clazz);
+        if (this.data instanceof byte[]) {
+            res.data = ((byte[]) this.data).clone();
+        } else if (this.data instanceof short[]) {
+            res.data = ((short[]) this.data).clone();
+        } else if (this.data instanceof int[]) {
+            res.data = ((int[]) this.data).clone();
+        } else if (this.data instanceof long[]) {
+            res.data = ((long[]) this.data).clone();
+        } else if (this.data instanceof char[]) {
+            res.data = ((char[]) this.data).clone();
+        } else if (this.data instanceof float[]) {
+            res.data = ((float[]) this.data).clone();
+        } else if (this.data instanceof double[]) {
+            res.data = ((double[]) this.data).clone();
+        } else if (this.data instanceof Object[]) {
+            res.data = ((java.lang.Object[]) this.data).clone();
+        } else {
+            Variables slots = (Variables) data;
+            res.data = slots.clone();
+        }
+        return res;
+    }
 }

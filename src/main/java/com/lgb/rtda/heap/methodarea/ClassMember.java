@@ -47,8 +47,9 @@ public class ClassMember {
         }
         Class c = this.clazz;
         if (this.isProtected()) {
-            return d == c || c.getPackageName().equals(d.getPackageName());
+            return d == c || d.isSubClassOf(c) || c.getPackageName().equals(d.getPackageName());
         }
+
         if (!this.isPrivate()) {
             return c.getPackageName().equals(d.getPackageName());
         }

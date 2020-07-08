@@ -29,6 +29,7 @@ import com.lgb.instructions.math.rem.*;
 import com.lgb.instructions.math.sub.*;
 import com.lgb.instructions.math.IINC;
 import com.lgb.instructions.references.*;
+import com.lgb.instructions.reserved.INVOKE_NATIVE;
 import com.lgb.instructions.stack.*;
 import com.lgb.instructions.conversions.d2x.*;
 import com.lgb.instructions.conversions.f2x.*;
@@ -260,7 +261,7 @@ public class Factory {
         //opcodeMap.put((byte) 0xc9:
         // 	return &JSR_W{}
         //opcodeMap.put((byte) 0xca: breakpoint
-        //opcodeMap.put((byte) 0xfe: impdep1
+        opcodeMap.put((byte) 0xfe, new INVOKE_NATIVE());
         //opcodeMap.put((byte) 0xff: impdep2
     }
     public static Instruction newInstruction(byte opcode) {

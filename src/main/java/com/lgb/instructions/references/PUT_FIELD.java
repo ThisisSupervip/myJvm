@@ -23,7 +23,9 @@ public class PUT_FIELD extends Index16Instruction {
         }
 
         if (field.isFinal()) {
-            throw new IllegalAccessError();
+            if (currentClazz != field.getClazz() || !"<init>".equals(currentMethod.getName())){
+                throw new IllegalAccessError();
+            }
         }
 
         String descriptor = field.getDescriptor();

@@ -2,12 +2,12 @@ package com.lgb.rtda;
 
 import com.lgb.rtda.heap.methodarea.Object;
 
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 
-public class Variables {
+public class Variables implements Cloneable {
     protected ByteBuffer byteBuffer;
     protected int size;
+
     public Variables(int size) {
         this.size = size;
         this.byteBuffer = byteBuffer.allocate(4 * size);
@@ -55,7 +55,7 @@ public class Variables {
 
     public void setRef(int index, Object ref) {
         int add = Memory.add(ref);
-        byteBuffer.putInt(index*4, add);
+        byteBuffer.putInt(index * 4, add);
     }
 
     public Object getRef(int index) {
@@ -68,7 +68,14 @@ public class Variables {
     }
 
 
-    public byte[] byteArray(){
+    public byte[] byteArray() {
         return byteBuffer.array();
+    }
+
+    @Override
+    public java.lang.Object clone() {
+        Variables res = new Variables(this.size);
+        res.byteBuffer = byteBuffer.wrap(this.byteBuffer.array().clone());
+        return res;
     }
 }

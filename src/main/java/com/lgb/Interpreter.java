@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Interpreter {
-    static boolean log = false;
+    public static boolean log = false;
     public static void interpret(Method method, String[] args) {
         Thread thread = new Thread();
         Frame frame = thread.newFrame(method);

@@ -19,8 +19,8 @@ public class DUP2 extends NoOperandsInstruction {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.operandStack;
-        byte slot1 = stack.popSlot();
-        byte slot2 = stack.popSlot();
+        int slot1 = stack.popSlot();
+        int slot2 = stack.popSlot();
         stack.pushSlot(slot2);
         stack.pushSlot(slot1);
         stack.pushSlot(slot2);

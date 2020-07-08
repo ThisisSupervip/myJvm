@@ -1,5 +1,6 @@
 package com.lgb.instructions.base;
 
+import com.lgb.Interpreter;
 import com.lgb.rtda.Frame;
 import com.lgb.rtda.Thread;
 import com.lgb.rtda.heap.methodarea.Class;
@@ -12,7 +13,9 @@ public class ClassInitLogic {
     public static void initClass(Thread thread, Class clazz) {
         clazz.startInit();
         scheduleClinit(thread, clazz);
-        System.out.println("initClass: "+clazz.getName());
+        if(Interpreter.log) {
+            System.out.println("initClass: " + clazz.getName());
+        }
         initSuperClass(thread, clazz);
     }
 

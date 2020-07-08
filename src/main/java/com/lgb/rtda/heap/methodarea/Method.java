@@ -27,25 +27,23 @@ public class Method extends ClassMember {
             this.maxLocals = codeAttribute.maxLocals.intValue;
             this.code = codeAttribute.code;
         }
-        this.argSlotCount = calcArgSlotCount();
+        MethodDescriptor md = MethodDescriptor.parseMethodDescriptor(this.descriptor);
+        this.argSlotCount = calcArgSlotCount(md.getParameterTypes());
+        if (isNative()) {
+            injectCodeAttribute(md.getReturnType());
+        }
     }
 
     public static Method[] newMethods(Class clazz, MemberInfo[] memberInfos) {
         Method[] methods = new Method[memberInfos.length];
         for (int i = 0; i < memberInfos.length; i++) {
-            //忽略native方法
-            /*if((memberInfos[i].getAccessFlags().intValue & Constants.ACC_NATIVE) != 0){
-                continue;
-            }*/
             methods[i] = new Method(clazz, memberInfos[i]);
         }
         return methods;
     }
 
-    private int calcArgSlotCount() {
+    private int calcArgSlotCount(List<String> parameterTypes) {
         int argSlotCount = 0;
-        MethodDescriptor methodDescriptor = MethodDescriptor.parseMethodDescriptor(this.descriptor);
-        List<String> parameterTypes = methodDescriptor.getParameterTypes();
         for (String parameterType : parameterTypes) {
             argSlotCount++;
             if("J".equals(parameterType) || "D".equals(parameterType)){//Long Double
@@ -64,5 +62,32 @@ public class Method extends ClassMember {
 
     public boolean isNative() {
         return 0 != (this.accessFlags & Constants.ACC_NATIVE);
+    }
+
+    private void injectCodeAttribute(String returnType) {
+        this.maxStack = 4;
+        this.maxLocals = this.argSlotCount;
+
+        switch (returnType.getBytes()[0]) {
+            case 'V':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xb1};
+                break;
+            case 'L':
+            case '[':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xb0};
+                break;
+            case 'D':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xaf};
+                break;
+            case 'F':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xae};
+                break;
+            case 'J':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xad};
+                break;
+            default:
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xac};
+                break;
+        }
     }
 }

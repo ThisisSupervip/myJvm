@@ -1,5 +1,6 @@
 package com.lgb.rtda.heap.classloader;
 
+import com.lgb.Interpreter;
 import com.lgb.classfile.ClassFile;
 import com.lgb.classpath.Classpath;
 import com.lgb.rtda.heap.StringPool;
@@ -8,6 +9,7 @@ import com.lgb.rtda.heap.methodarea.Class;
 import com.lgb.rtda.heap.methodarea.Field;
 import com.lgb.rtda.heap.methodarea.Object;
 import com.lgb.rtda.heap.methodarea.Slots;
+import com.lgb.util.ClassNameHelper;
 import com.sun.org.apache.bcel.internal.Constants;
 
 import java.util.HashMap;
@@ -21,18 +23,29 @@ public class Classloader {
     public Classloader(Classpath classpath) {
         this.classpath = classpath;
         this.map = new HashMap<>();
+        loadBasicClasses();
+        loadPrimitiveClasses();
     }
 
     public Class loadClass(String name) {
-        Class res = null;
-        if (Objects.nonNull(res = map.get(name))) {
-            return res;
+        Class clazz = null;
+        if (Objects.nonNull(clazz = map.get(name))) {
+            return clazz;
         }
-        if ('[' == name.getBytes()[0]) {
-            return loadArrayClass(name);
+        if (name.getBytes()[0] == '[') {
+            clazz = loadArrayClass(name);
+        } else {
+            clazz = loadNonArrayClass(name);
         }
-        res = loadNonArrayClass(name);
-        return res;
+
+        Class jlClazz = this.map.get("java/lang/Class");
+        if (null != jlClazz && null != clazz) {
+            Object jlcObj = jlClazz.newObject();
+            jlcObj.setExtra(clazz);
+            clazz.setJClass(jlcObj);
+        }
+
+        return clazz;
     }
 
     private Class loadNonArrayClass(String name) {
@@ -41,7 +54,9 @@ public class Classloader {
         Class clazz = defineClass(bytes);
         //连接
         link(clazz);
-        System.out.printf("[Loaded class: %s]\n", name);
+        if(Interpreter.log) {
+            System.out.printf("[Loaded class: %s]\n", name);
+        }
         return clazz;
     }
 
@@ -62,6 +77,33 @@ public class Classloader {
             throw new RuntimeException("java.lang.ClassNotFoundException: " + name);
         }
         return bytes;
+    }
+
+    private void loadBasicClasses() {
+        Class jlClassClass = loadClass("java/lang/Class");
+        for (Map.Entry<String, Class> entry : this.map.entrySet()) {
+            Class clazz = entry.getValue();
+            if (Objects.isNull(clazz.getJClass())) {
+                clazz.setJClass(jlClassClass.newObject());
+                clazz.getJClass().setExtra(clazz);
+            }
+        }
+    }
+
+    private void loadPrimitiveClasses() {
+        for (Map.Entry<String, String> entry : ClassNameHelper.primitiveTypes.entrySet()) {
+            loadPrimitiveClass(entry.getKey());
+        }
+    }
+
+    private void loadPrimitiveClass(String className) {
+        Class clazz = new Class(Constants.ACC_PUBLIC,
+                className,
+                this,
+                true);
+        Object jlcObj = this.map.get("java/lang/Class").newObject();
+        jlcObj.setExtra(clazz);
+        this.map.put(className, clazz);
     }
 
     private Class defineClass(byte[] data) {
