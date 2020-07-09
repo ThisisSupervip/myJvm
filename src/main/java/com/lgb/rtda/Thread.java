@@ -2,6 +2,8 @@ package com.lgb.rtda;
 
 import com.lgb.rtda.heap.methodarea.Method;
 
+import java.util.Arrays;
+
 public class Thread {
     private int pc;
     public final Frame[] stack;
@@ -13,13 +15,14 @@ public class Thread {
     }
 
     public void pushFrame(Frame frame) {
-        if(stackSize==stack.length){
+        if (stackSize == stack.length) {
             throw new StackOverflowError();
         }
         stack[stackSize++] = frame;
     }
+
     public Frame popFrame() {
-        if(isStackEmpty()){
+        if (isStackEmpty()) {
             throw new RuntimeException("jvm stack is empty");
         }
         return stack[--stackSize];
@@ -28,16 +31,18 @@ public class Thread {
     public Frame currentFrame() {
         return topFrame();
     }
+
     public Frame topFrame() {
-        if(isStackEmpty()){
+        if (isStackEmpty()) {
             throw new RuntimeException("jvm stack is empty");
         }
-        return stack[stackSize-1];
+        return stack[stackSize - 1];
     }
 
-    public boolean isStackEmpty(){
+    public boolean isStackEmpty() {
         return this.stackSize == 0;
     }
+
     public Frame newFrame(Method method) {
         return new Frame(this, method);
     }
@@ -45,7 +50,16 @@ public class Thread {
     public void setPC(int pc) {
         this.pc = pc;
     }
+
     public int pc() {
         return this.pc;
+    }
+
+    public void clearStack() {
+        this.stackSize = 0;
+    }
+
+    public Frame[] getFrames() {
+        return Arrays.copyOfRange(stack, 0, this.stackSize - 1);
     }
 }

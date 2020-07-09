@@ -17,6 +17,8 @@ public class Method extends ClassMember {
     private int maxLocals;
     @Getter
     private byte[] code;
+    private ExceptionTable exceptionTable;
+    private AttributeInfoType.LineNumberTableAttribute lineNumberTable;
     public final int argSlotCount;
 
     public Method(Class clazz, MemberInfo memberInfo) {
@@ -26,6 +28,8 @@ public class Method extends ClassMember {
             this.maxStack = codeAttribute.maxStack.intValue;
             this.maxLocals = codeAttribute.maxLocals.intValue;
             this.code = codeAttribute.code;
+            this.exceptionTable = new ExceptionTable(codeAttribute.exceptionTable, clazz.getConstantPool());
+            this.lineNumberTable = codeAttribute.lineNumberTableAttribute();
         }
         MethodDescriptor md = MethodDescriptor.parseMethodDescriptor(this.descriptor);
         this.argSlotCount = calcArgSlotCount(md.getParameterTypes());
@@ -64,6 +68,14 @@ public class Method extends ClassMember {
         return 0 != (this.accessFlags & Constants.ACC_NATIVE);
     }
 
+    public int findExceptionHandler(Class exClass, int pc) {
+        ExceptionTable.ExceptionHandler handler = this.exceptionTable.findExceptionHandler(exClass, pc);
+        if (handler != null) {
+            return handler.handlerPC;
+        }
+        return -1;
+    }
+
     private void injectCodeAttribute(String returnType) {
         this.maxStack = 4;
         this.maxLocals = this.argSlotCount;
@@ -89,5 +101,11 @@ public class Method extends ClassMember {
                 this.code = new byte[]{(byte) 0xfe, (byte) 0xac};
                 break;
         }
+    }
+
+    public int getLineNumber(int pc) {
+        if (this.isNative()) return -2;
+        if (this.lineNumberTable == null) return -1;
+        return this.lineNumberTable.getLineNumber(pc);
     }
 }

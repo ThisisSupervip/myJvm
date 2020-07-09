@@ -34,8 +34,11 @@ public class Class {
     private Slots staticVars;
     private boolean initStarted;
     //指向类对象
-    @Getter @Setter
+    @Getter
+    @Setter
     private Object jClass;
+    @Getter
+    private String sourceFile;
 
 
     public Class(ClassFile classFile) {
@@ -46,6 +49,7 @@ public class Class {
         parseInterfaceNames(classFile);
         this.fields = Field.newFields(this, classFile.getFields());
         this.methods = Method.newMethods(this, classFile.getMethods());
+        this.sourceFile = classFile.getSourceFile();
     }
 
     public Class(int accessFlags, String name, Classloader classloader, boolean initStarted, Class superClass, Class[] interfaces) {
@@ -102,8 +106,11 @@ public class Class {
     }
 
     public boolean isSubInterfaceOf(Class iface) {
+        if (Objects.nonNull(this.interfaces)) {
+            return false;
+        }
         for (Class superInterface : this.interfaces) {
-            if (superInterface == iface || superInterface.isSubInterfaceOf(iface)) {
+            if ((superInterface == iface || superInterface.isSubInterfaceOf(iface))) {
                 return true;
             }
         }
@@ -311,5 +318,9 @@ public class Class {
 
     public Method getInstanceMethod(String name, String descriptor) {
         return this.getStaticMethod(name, descriptor, false);
+    }
+
+    public Class getSuperClazz() {
+        return superClass;
     }
 }

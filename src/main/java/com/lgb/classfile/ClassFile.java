@@ -4,6 +4,8 @@ import com.lgb.classfile.fundamental.*;
 import com.sun.org.apache.bcel.internal.classfile.ClassFormatException;
 import lombok.Getter;
 
+import java.util.Objects;
+
 
 public class ClassFile {
     private static final U4 CLASS_FILE_MAGIC = new U4(new byte[] {-54, -2, -70, -66});
@@ -104,6 +106,31 @@ public class ClassFile {
 
     public ConstantInfo[] getConstantPool() {
         return constantPool;
+    }
+
+    public String getSourceFile() {
+        int sourceFileIndex = getSourceFileIndex();
+        String res = "Unknown";
+        if(sourceFileIndex>0){
+           res = getUTF8String(sourceFileIndex);
+        }
+        return res;
+    }
+
+    private int getSourceFileIndex() {
+        for (AttributeInfo arrInfo : this.attributes) {
+            if (arrInfo instanceof AttributeInfoType.SourceFileAttribute){
+                AttributeInfoType.SourceFileAttribute sourceFileAttribute = (AttributeInfoType.SourceFileAttribute) arrInfo;
+                if(Objects.nonNull(sourceFileAttribute)){
+                    return sourceFileAttribute.sourceFileIndex;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private String getUTF8String(int index){
+        return ((ConstantInfoType.ConstantUtf8Info)this.constantPool[index]).val;
     }
 
 }

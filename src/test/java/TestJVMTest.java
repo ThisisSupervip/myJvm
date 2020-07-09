@@ -76,6 +76,15 @@ class TestJVMTest {
       Interpreter.interpret(mainMethod, new String[]{});
    }
 
+   @Test
+   public void ch10_parseIntTest() {
+      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
+      Class clazz = JVM.loadClass("jvmgo.book.ch10.ParseIntTest", classpath);
+      Method mainMethod = JVM.getMainMethod(clazz);
+      Interpreter.interpret(mainMethod, new String[]{});
+   }
+
+
    public static String bytesToHex(byte[] bytes) {
       StringBuffer sb = new StringBuffer();
       for(int i = 0; i < bytes.length; i++) {

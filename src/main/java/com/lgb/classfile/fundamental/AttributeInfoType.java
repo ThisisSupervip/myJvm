@@ -128,6 +128,15 @@ public class AttributeInfoType {
             attributes = readAttributes(classReader, constantPool);
         }
 
+        public LineNumberTableAttribute lineNumberTableAttribute() {
+            for (AttributeInfo attrInfo : this.attributes) {
+                if (attrInfo instanceof LineNumberTableAttribute) {
+                    return (LineNumberTableAttribute) attrInfo;
+                }
+            }
+            return null;
+        }
+
     }
 
     public static class ExceptionTableEntry {
@@ -183,6 +192,15 @@ public class AttributeInfoType {
                 U2 lineNumber = classReader.readU2();
                 lineNumberTable[i] = new LineNumberTableEntry(startPc, lineNumber);
             }
+        }
+        public int getLineNumber(int pc) {
+            for (int i = this.lineNumberTable.length - 1; i >= 0; i--) {
+                LineNumberTableEntry entry = this.lineNumberTable[i];
+                if (pc >= entry.startPc.intValue){
+                    return entry.lineNumber.intValue;
+                }
+            }
+            return -1;
         }
     }
 

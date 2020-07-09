@@ -23,6 +23,7 @@ public class Registry {
         new _Double();
         new _Float();
         new _VM();
+        new _Throwable();
     }
 
     public static void register(String className, String methodName, String methodDescriptor, NativeMethod method) {

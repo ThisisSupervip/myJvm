@@ -219,10 +219,8 @@ public class Factory {
         opcodeMap.put((byte) 0xa5, new IF_ACMPEQ());
         opcodeMap.put((byte) 0xa6, new IF_ACMPNE());
         opcodeMap.put((byte) 0xa7, new GOTO());
-        //opcodeMap.put((byte) 0xa8:
-        // 	return &JSR{}
-        //opcodeMap.put((byte) 0xa9:
-        // 	return &RET{}
+        //opcodeMap.put((byte) 0xa8, JSR());
+        //opcodeMap.put((byte) 0xa9, RET());
         opcodeMap.put((byte) 0xaa, new TABLE_SWITCH());
         opcodeMap.put((byte) 0xab, new LOOKUP_SWITCH());
         opcodeMap.put((byte) 0xac, new IRETURN());
@@ -239,30 +237,25 @@ public class Factory {
         opcodeMap.put((byte) 0xb7, new INVOKE_SPECIAL());
         opcodeMap.put((byte) 0xb8, new INVOKE_STATIC());
         opcodeMap.put((byte) 0xb9, new INVOKE_INTERFACE());
-        //opcodeMap.put((byte) 0xba:
-        // 	return &INVOKE_DYNAMIC{}
+        //opcodeMap.put((byte) 0xba, new INVOKE_DYNAMIC());
         opcodeMap.put((byte) 0xbb, new NEW());
         opcodeMap.put((byte) 0xbc, new NEW_ARRAY());
         opcodeMap.put((byte) 0xbd, new ANEW_ARRAY());
         opcodeMap.put((byte) 0xbe, new ARRAY_LENGTH());
-        //opcodeMap.put((byte) 0xbf:
-        // 	return athrow
+        opcodeMap.put((byte) 0xbf, new ATHROW());
         opcodeMap.put((byte) 0xc0, new CHECK_CAST());
         opcodeMap.put((byte) 0xc1, new INSTANCE_OF());
-        //opcodeMap.put((byte) 0xc2:
-        // 	return monitorenter
-        //opcodeMap.put((byte) 0xc3:
-        // 	return monitorexit
+        //opcodeMap.put((byte) 0xc2, new MONITORENTER());
+        //opcodeMap.put((byte) 0xc3, new MONITOREXIT());
         opcodeMap.put((byte) 0xc4, new WIDE());
         opcodeMap.put((byte) 0xc5, new MULTI_ANEW_ARRAY());
         opcodeMap.put((byte) 0xc6, new IFNULL());
         opcodeMap.put((byte) 0xc7, new IFNONNULL());
         opcodeMap.put((byte) 0xc8, new GOTO_W());
-        //opcodeMap.put((byte) 0xc9:
-        // 	return &JSR_W{}
-        //opcodeMap.put((byte) 0xca: breakpoint
+        //opcodeMap.put((byte) 0xc9, new JSR_W());
+        //opcodeMap.put((byte) 0xca, BREAKPOINT());
         opcodeMap.put((byte) 0xfe, new INVOKE_NATIVE());
-        //opcodeMap.put((byte) 0xff: impdep2
+        //opcodeMap.put((byte) 0xff, IMPDEP2());
     }
     public static Instruction newInstruction(byte opcode) {
         Instruction inst = null;

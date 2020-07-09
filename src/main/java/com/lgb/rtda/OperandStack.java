@@ -107,4 +107,8 @@ public class OperandStack {
 
         return Memory.objects.get(anInt);
     }
+
+    public void clear() {
+        byteBuffer.clear();
+    }
 }
