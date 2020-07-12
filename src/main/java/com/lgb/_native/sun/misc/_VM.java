@@ -3,10 +3,9 @@ package com.lgb._native.sun.misc;
 import com.lgb._native.NativeMethod;
 import com.lgb._native.Registry;
 import com.lgb.instructions.base.MethodInvokeLogic;
-import com.lgb.rtda.heap.StringPool;
+import com.lgb.rtda.heap.classloader.Classloader;
 import com.lgb.rtda.heap.methodarea.Class;
 import com.lgb.rtda.heap.methodarea.Method;
-import com.lgb.rtda.heap.methodarea.Object;
 
 public class _VM {
 
@@ -17,19 +16,10 @@ public class _VM {
     }
 
     public NativeMethod initialize = (frame) -> {
-        Class vmClass = frame.method.getClazz();
-        Object savedProps = vmClass.getRefVar("savedProps", "Ljava/util/Properties;");
-        Object key = StringPool.jString(vmClass.getClassloader(), "foo");
-        Object val = StringPool.jString(vmClass.getClassloader(), "bar");
-
-        frame.operandStack.pushRef(savedProps);
-        frame.operandStack.pushRef(key);
-        frame.operandStack.pushRef(val);
-
-        Class propsClass = vmClass.getClassloader().loadClass("java/util/Properties");
-        Method setPropMethod = propsClass.getInstanceMethod("setProperty",
-                "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;");
-        MethodInvokeLogic.invokeMethod(frame, setPropMethod);
+        Classloader classLoader = frame.method.getClazz().getClassloader();
+        Class jlSysClass = classLoader.loadClass("java/lang/System");
+        Method initSysClass = jlSysClass.getStaticMethod("initializeSystemClass", "()V");
+        MethodInvokeLogic.invokeMethod(frame, initSysClass);
     };
 
 }

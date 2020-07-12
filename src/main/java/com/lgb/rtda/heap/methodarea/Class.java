@@ -11,7 +11,9 @@ import com.sun.org.apache.bcel.internal.Constants;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -40,6 +42,9 @@ public class Class {
     @Getter
     private String sourceFile;
 
+
+    public Class() {
+    }
 
     public Class(ClassFile classFile) {
         this.accessFlags = classFile.getAccessFlags().intValue;
@@ -106,9 +111,6 @@ public class Class {
     }
 
     public boolean isSubInterfaceOf(Class iface) {
-        if (Objects.nonNull(this.interfaces)) {
-            return false;
-        }
         for (Class superInterface : this.interfaces) {
             if ((superInterface == iface || superInterface.isSubInterfaceOf(iface))) {
                 return true;
@@ -272,6 +274,10 @@ public class Class {
         return this.name.getBytes()[0] == '[';
     }
 
+    public boolean isString() {
+        return this.name.equals("java/lang/String");
+    }
+
     public Object newArray(int count) {
         if (!this.isArray()) {
             throw new RuntimeException("Not array class " + this.name);
@@ -298,6 +304,7 @@ public class Class {
         }
     }
 
+
     public Class componentClass() {
         String componentClassName = ClassNameHelper.getComponentClassName(this.name);
         return this.classloader.loadClass(componentClassName);
@@ -307,7 +314,7 @@ public class Class {
         return this.name.substring(0, 1) + this.name.substring(1).replace("/", ".");
     }
 
-    public boolean IsPrimitive() {
+    public boolean isPrimitive() {
         return null != ClassNameHelper.primitiveTypes.get(this.name);
     }
 
@@ -322,5 +329,60 @@ public class Class {
 
     public Class getSuperClazz() {
         return superClass;
+    }
+
+    public Field[] getFields(boolean publicOnly) {
+        if (publicOnly) {
+            List<Field> publicFields = new ArrayList<>();
+            for (int i = 0; i < fields.length; i++) {
+                Field field = fields[i];
+                if(field.isPublic()) {
+                    publicFields.add(field);
+                }
+            }
+            Field[] res = new Field[publicFields.size()];
+            return publicFields.toArray(res);
+        } else {
+            return fields;
+        }
+    }
+
+
+
+    public Method getConstructor(String descriptor) {
+        return getInstanceMethod("<init>", descriptor);
+    }
+
+    public Method[] getConstructors(boolean publicOnly) {
+        List<Method> constructors = new ArrayList<>();
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+            if(method.isConstructor()) {
+                if(!publicOnly || method.isPublic()) {
+                    constructors.add(methods[i]);
+                }
+            }
+        }
+        Method[] res = new Method[constructors.size()];
+        return constructors.toArray(res);
+    }
+
+    public Method[] getMethods(boolean publicOnly) {
+        List<Method> methods = new ArrayList<>();
+        for (int i = 0; i < this.methods.length; i++) {
+            Method method = this.methods[i];
+            if(!method.isClinit() && !method.isConstructor()) {
+                if(!publicOnly || method.isPublic()) {
+                    methods.add(this.methods[i]);
+                }
+            }
+        }
+        Method[] res = new Method[methods.size()];
+        return methods.toArray(res);
+    }
+
+    public void setRefVar(String fieldName, String fieldDescriptor, Object ref) {
+        Field field = this.getField(fieldName, fieldDescriptor, true);
+        this.staticVars.setRef(field.getSlotId(), ref);
     }
 }

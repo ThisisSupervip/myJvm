@@ -2,17 +2,26 @@ package com.lgb.rtda.heap.methodarea;
 
 import com.lgb.classfile.fundamental.MemberInfo;
 import lombok.Getter;
+import lombok.Setter;
 
 import static com.sun.org.apache.bcel.internal.Constants.*;
 
 public class ClassMember {
-    protected int accessFlags;
     @Getter
+    protected int accessFlags;
+    @Getter @Setter
     protected String name;
     @Getter
     protected String descriptor;
-    @Getter
+    @Getter @Setter
     protected Class clazz;
+    @Getter
+    protected String signature;
+    @Getter
+    protected byte[] annotationData;
+
+    public ClassMember() {
+    }
 
     public ClassMember(Class clazz, MemberInfo memberInfo) {
         this.clazz = clazz;

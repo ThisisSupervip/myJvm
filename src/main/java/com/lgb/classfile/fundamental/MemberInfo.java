@@ -19,9 +19,9 @@ public class MemberInfo {
     private AttributeInfo[] attributeInfos;
 
 
-    public AttributeInfoType.CodeAttribute codeAttribute(){
+    public AttributeInfoType.CodeAttribute codeAttribute() {
         for (int i = 0; i < attributeInfos.length; i++) {
-            if(attributeInfos[i] instanceof AttributeInfoType.CodeAttribute){
+            if (attributeInfos[i] instanceof AttributeInfoType.CodeAttribute) {
                 return (AttributeInfoType.CodeAttribute) attributeInfos[i];
             }
         }
@@ -37,13 +37,47 @@ public class MemberInfo {
     }
 
 
-    public ConstantInfoType.ConstantUtf8Info getConstUTF8(int index){
+    public ConstantInfoType.ConstantUtf8Info getConstUTF8(int index) {
         return (ConstantInfoType.ConstantUtf8Info) constantPool[index];
     }
 
     public AttributeInfoType.ConstantValueAttribute getConstantValueAttribute() {
         for (AttributeInfo attrInfo : attributeInfos) {
-            if (attrInfo instanceof AttributeInfoType.ConstantValueAttribute) return (AttributeInfoType.ConstantValueAttribute) attrInfo;
+            if (attrInfo instanceof AttributeInfoType.ConstantValueAttribute)
+                return (AttributeInfoType.ConstantValueAttribute) attrInfo;
+        }
+        return null;
+    }
+
+    public AttributeInfoType.ExceptionsAttribute exceptionsAttribute() {
+        for (AttributeInfo attributeInfo : attributeInfos) {
+            if (attributeInfo instanceof AttributeInfoType.ExceptionsAttribute) {
+                return ((AttributeInfoType.ExceptionsAttribute) attributeInfo);
+            }
+        }
+        return null;
+    }
+
+    public byte[] runtimeVisibleAnnotationsAttributeData() {
+        return getUnparsedAttributeData("RuntimeVisibleAnnotations");
+    }
+
+    public byte[] runtimeVisibleParameterAnnotationsAttributeData() {
+        return getUnparsedAttributeData("RuntimeVisibleParameterAnnotationsAttribute");
+    }
+
+    public byte[] annotationDefaultAttributeData() {
+        return getUnparsedAttributeData("AnnotationDefault");
+    }
+
+
+    private byte[] getUnparsedAttributeData(String name) {
+        for (AttributeInfo attributeInfo : attributeInfos) {
+            if (attributeInfo instanceof AttributeInfoType.UnparsedAttribute) {
+                if (attributeInfo.attrName == name) {
+                    return ((AttributeInfoType.UnparsedAttribute) attributeInfo).info;
+                }
+            }
         }
         return null;
     }

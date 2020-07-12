@@ -176,6 +176,13 @@ public class AttributeInfoType {
                 exceptionIndexTable[i] = classReader.readU2();
             }
         }
+        public int[] getExceptionIndexTable(){
+            int[] res = new int[exceptionIndexTable.length];
+            for (int i = 0; i < exceptionIndexTable.length; i++) {
+                res[i] = exceptionIndexTable[i].toInt();
+            }
+            return res;
+        }
     }
 
     public static class LineNumberTableAttribute extends AttributeInfo {

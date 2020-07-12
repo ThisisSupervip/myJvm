@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class MethodDescriptor {
     @Getter
@@ -21,6 +22,57 @@ public class MethodDescriptor {
     public static MethodDescriptor parseMethodDescriptor(String descriptor) {
        MethodDescriptorParser parser = new MethodDescriptorParser();
        return parser.parse(descriptor);
+    }
+
+    public Class getOrgReturnType(){
+        if(Objects.isNull(returnType)){
+            return null;
+        }
+        return getJavaOrgType(returnType);
+    }
+
+    public java.lang.Class[] javaOrgParameterTypes(){
+        java.lang.Class[] res = new java.lang.Class[parameterTypes.size()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = getJavaOrgType(parameterTypes.get(i));
+        }
+        return res;
+    }
+
+    private static java.lang.Class getJavaOrgType(String descriptor) {
+        switch (descriptor){
+            case "B":
+                return byte.class;
+            case "C":
+                return char.class;
+            case "D":
+                return double.class;
+            case "F":
+                return float.class;
+            case "I":
+                return int.class;
+            case "J":
+                return long.class;
+            case "S":
+                return short.class;
+            case "Z":
+                return boolean.class;
+            default:
+                return parseNoPrimitiveJavaOrgType(descriptor);
+        }
+    }
+
+    private static java.lang.Class parseNoPrimitiveJavaOrgType(String descriptor){
+        if(descriptor.startsWith("L")){
+            int length = descriptor.length();
+            String typeName = descriptor.substring(1, length - 1).replace("/", ".");
+            try {
+                return Class.forName(typeName);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     private static class MethodDescriptorParser{

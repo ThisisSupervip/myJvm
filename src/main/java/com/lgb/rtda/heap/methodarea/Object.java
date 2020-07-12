@@ -2,6 +2,7 @@ package com.lgb.rtda.heap.methodarea;
 
 import com.lgb.rtda.LocalVariables;
 import com.lgb.rtda.Variables;
+import com.lgb.rtda.heap.StringPool;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +34,7 @@ public class Object {
      * @param descriptor
      * @param ref
      */
-    public void setRefVal(String name, String descriptor, Object ref) {
+    public void setRefVar(String name, String descriptor, Object ref) {
         Field field = this.clazz.getField(name, descriptor, false);
         LocalVariables slots = (LocalVariables) this.data;
         slots.setRef(field.getSlotId(), ref);
@@ -43,6 +44,18 @@ public class Object {
         Field field = this.clazz.getField(name, descriptor, false);
         LocalVariables slots = (LocalVariables) this.data;
         return slots.getRef(field.getSlotId());
+    }
+
+    public void setIntVar(String name, String descriptor, int val) {
+        Field field = clazz.getField(name, descriptor, false);
+        LocalVariables slots = (LocalVariables) data;
+        slots.setInt(field.getSlotId(), val);
+    }
+
+    public int getIntVar(String name, String descriptor) {
+        Field field = clazz.getField(name, descriptor, false);
+        LocalVariables slots = (LocalVariables) data;
+        return slots.getInt(field.getSlotId());
     }
 
     public boolean isInstanceOf(Class clazz) {
@@ -148,5 +161,20 @@ public class Object {
             res.data = slots.clone();
         }
         return res;
+    }
+
+    public java.lang.Object parseToJavaOrgObj() {
+        Class c = this.clazz;
+        if (c.isArray()) {
+            if (c.getName().length() == 2) {
+                return this.data;
+            }
+        } else {
+            if (c.isString()) {
+                return StringPool.goString(this);
+            }
+            return this.data;
+        }
+        return null;
     }
 }

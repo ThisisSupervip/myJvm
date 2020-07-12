@@ -13,20 +13,15 @@ import com.lgb.rtda.heap.methodarea.Method;
 import com.lgb.rtda.heap.methodarea.Object;
 import com.lgb.util.ByteUtil;
 
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class Interpreter {
-    public static boolean log = false;
-    public static void interpret(Method method, String[] args) {
-        Thread thread = new Thread();
-        Frame frame = thread.newFrame(method);
-        thread.pushFrame(frame);
 
-        if (null != args){
-            Object jArgs = createArgsArray(method.getClazz().getClassloader(), args);
-            frame.localVariables.setRef(0, jArgs);
-        }
+    public static final boolean log = !true;
+
+    public static void interpret(Thread thread, boolean log) {
         loop(thread, log);
     }
 
@@ -35,6 +30,7 @@ public class Interpreter {
         Frame lastExeFrame = null;
         while (true) {
             Frame frame = thread.currentFrame();
+            //log = filterFrame("Constructor","getParameterTypes", frame);
             if (log) {
                 if (Objects.nonNull(lastExeFrame) && !lastExeFrame.equals(frame)) {
                     System.out.println("New frame info:");
@@ -71,27 +67,23 @@ public class Interpreter {
 
     }
 
-    private static Object createArgsArray(Classloader loader, String[] args) {
-        Class stringClass = loader.loadClass("java/lang/String");
-        Object argsArr = stringClass.arrayClass().newArray(args.length);
-        Object[] jArgs = argsArr.refs();
-        for (int i = 0; i < jArgs.length; i++) {
-            jArgs[i] = StringPool.jString(loader, args[i]);
-        }
-        return argsArr;
-    }
-
     private static byte readOpcode(BytecodeReader reader) {
         return reader.readInt8();
     }
 
     private static void printFrameInfo(Frame frame) {
-        System.out.printf("frame: %s\n", frame.method.getClazz().getName() + "/" + frame.method.getName());
+        System.out.printf("frame: %s pc:%s\n", frame.method.getClazz().getName() + "#" + frame.method.getName(), frame.nextPC());
         String localVarHax = ByteUtil.hexDump(frame.localVariables.byteArray());
         String operandStackHax = ByteUtil.hexDump(frame.operandStack.byteArray());
         System.out.printf("localVarHax: %s", localVarHax);
         System.out.printf("operandStackHax: %s", operandStackHax);
-        System.out.printf("Objects: %s\n\n", Arrays.toString(Memory.objects.toArray()));
+        //System.out.printf("Objects: %s\n\n", Arrays.toString(Memory.objects.toArray()));
+    }
+
+    private static boolean filterFrame(String className, String methodName, Frame frame){
+        String mName = frame.method.getName();
+        String cName = frame.method.getClazz().getName();
+        return mName.contains(methodName)&&cName.contains(className);
     }
 
 }

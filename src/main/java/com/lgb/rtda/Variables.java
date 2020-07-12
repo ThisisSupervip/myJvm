@@ -72,10 +72,16 @@ public class Variables implements Cloneable {
         return byteBuffer.array();
     }
 
+    public boolean getBoolean(int index) {
+        return getInt(index) == 1;
+    }
+
     @Override
     public java.lang.Object clone() {
         Variables res = new Variables(this.size);
         res.byteBuffer = byteBuffer.wrap(this.byteBuffer.array().clone());
         return res;
     }
+
+
 }

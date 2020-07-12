@@ -3,6 +3,9 @@ package com.lgb.rtda;
 import com.lgb.rtda.heap.constantPool.ConstantPool;
 import com.lgb.rtda.heap.methodarea.Method;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Frame {
 
     public final LocalVariables localVariables;
@@ -16,6 +19,13 @@ public class Frame {
         this.method = method;
         this.localVariables = new LocalVariables(method.getMaxLocals());
         this.operandStack = new OperandStack(method.getMaxStack());
+    }
+
+    public Frame(OperandStack operandStack, Method method, Thread thread) {
+        this.operandStack = operandStack;
+        this.localVariables = new LocalVariables(method.getMaxLocals());
+        this.method = method;
+        this.thread = thread;
     }
 
     public void setNextPC(int nextPC) {
@@ -32,4 +42,7 @@ public class Frame {
     public ConstantPool getConstantPool() {
         return this.method.getClazz().getConstantPool();
     }
+
+
+
 }

@@ -5,7 +5,7 @@ import com.lgb.rtda.heap.methodarea.Object;
 import java.util.*;
 
 public class Memory {
-    public static List<Object> objects = new ArrayList<>(11);
+    public static List<Object> objects = new LinkedList<>();
     private static int pos = 1;
     static {
         objects.add(null);

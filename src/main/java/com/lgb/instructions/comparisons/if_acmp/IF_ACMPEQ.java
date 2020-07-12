@@ -10,7 +10,7 @@ public class IF_ACMPEQ extends BranchInstruct {
         OperandStack stack = frame.operandStack;
         Object ref2 = stack.popRef();
         Object ref1 = stack.popRef();
-        if (ref1.equals(ref2)) {
+        if (ref1 == ref2) {
             branch(frame, this.offset);
         }
     }

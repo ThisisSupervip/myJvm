@@ -14,6 +14,7 @@ public class CHECK_CAST extends Index16Instruction {
         OperandStack operandStack = frame.operandStack;
         Object ref = operandStack.popRef();
         operandStack.pushRef(ref);
+        if (null == ref) return;
         ConstantPool constantPool = frame.method.getClazz().getConstantPool();
         ClassRef classRef = (ClassRef) constantPool.getConstant(this.index);
         Class clazz = classRef.resolvedClass();

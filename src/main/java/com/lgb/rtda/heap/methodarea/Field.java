@@ -2,6 +2,7 @@ package com.lgb.rtda.heap.methodarea;
 
 import com.lgb.classfile.fundamental.AttributeInfoType;
 import com.lgb.classfile.fundamental.MemberInfo;
+import com.lgb.util.ClassNameHelper;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +34,12 @@ public class Field extends ClassMember {
     public boolean isLongOrDouble(){
         String descriptor = this.getDescriptor();
         return "J".equals(descriptor) || "D".equals(descriptor);
+    }
+
+    // reflection
+    public Class getType() {
+        String className = ClassNameHelper.toClassName(descriptor);
+        return clazz.getClassloader().loadClass(className);
     }
 
 }

@@ -5,11 +5,15 @@ import com.lgb.rtda.heap.methodarea.Object;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class StringPool {
     private static Map<String, Object> internedStrings = new HashMap<>();
 
     public static Object jString(Classloader loader, String str) {
+        if(Objects.isNull(str)){
+            return null;
+        }
         Object internedStr = internedStrings.get(str);
         if (null != internedStr) return internedStr;
 
@@ -17,7 +21,7 @@ public class StringPool {
         Object jChars = new Object(loader.loadClass("[C"), chars);
 
         Object jStr = loader.loadClass("java/lang/String").newObject();
-        jStr.setRefVal("value", "[C", jChars);
+        jStr.setRefVar("value", "[C", jChars);
 
         internedStrings.put(str, jStr);
         return jStr;

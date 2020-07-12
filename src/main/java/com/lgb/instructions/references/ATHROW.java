@@ -17,6 +17,12 @@ public class ATHROW extends NoOperandsInstruction {
         }
 
         Thread thread = frame.thread;
+        //hack 绕过AtomicReferenceFieldUpdaterImpl调用ensureMemberAccess抛出异常
+        if(frame.method.getName().equals("ensureMemberAccess")&&frame.method.getClazz().getName().equals("sun/reflect/Reflection")){
+            //return
+            frame.setNextPC(85);
+            return;
+        }
         if (!findAndGotoExceptionHandler(thread, ex)) {
             handleUncaughtException(thread, ex);
         }
@@ -47,15 +53,15 @@ public class ATHROW extends NoOperandsInstruction {
         Object jMsg = ex.getRefVar("detailMessage", "Ljava/lang/String;");
 
         String msg = StringPool.goString(jMsg);
+        //if(!msg.contains("java.lang.System")) {
+            System.out.println("\u001B[31m" + "MyJVM execute Exception in thread \"main\" " + ex.clazz.javaName() + ": " + msg);
+            java.lang.Object extra = ex.getExtra();
 
-        System.out.println("\u001B[31m" + "Exception in thread \"main\" " + ex.clazz.javaName() + ": " + msg);
-
-        java.lang.Object extra = ex.getExtra();
-
-        _Throwable[] throwables = (_Throwable[]) extra;
-        for (_Throwable t : throwables) {
-            System.out.println("\u001B[31m" + "\tat " + t);
-        }
+            _Throwable[] throwables = (_Throwable[]) extra;
+            for (_Throwable t : throwables) {
+                System.out.println("\u001B[31m" + "\tat " + t);
+            }
+        //}
 
     }
 

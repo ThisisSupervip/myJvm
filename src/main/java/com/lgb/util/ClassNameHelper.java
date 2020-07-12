@@ -44,7 +44,7 @@ public class ClassNameHelper {
         return "L" + className + ";";
     }
 
-    private static String toClassName(String descriptor) {
+    public static String toClassName(String descriptor) {
         byte descByte = descriptor.getBytes()[0];
         if (descByte == '[') {
             return descriptor;
@@ -64,4 +64,5 @@ public class ClassNameHelper {
         throw new RuntimeException("Invalid descriptor " + descriptor);
 
     }
+
 }

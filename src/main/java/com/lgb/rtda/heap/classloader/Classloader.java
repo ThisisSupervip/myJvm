@@ -103,6 +103,7 @@ public class Classloader {
                 true);
         Object jlcObj = this.map.get("java/lang/Class").newObject();
         jlcObj.setExtra(clazz);
+        clazz.setJClass(jlcObj);
         this.map.put(className, clazz);
     }
 
@@ -128,7 +129,7 @@ public class Classloader {
 
     private void resolveInterface(Class clazz) {
         String[] interfaceNames = clazz.getInterfaceNames();
-        if (interfaceNames.length > 0) {
+        if (interfaceNames.length >= 0) {
             Class[] interfaces = new Class[interfaceNames.length];
             for (int i = 0; i < interfaceNames.length; i++) {
                 interfaces[i] = clazz.getClassloader().loadClass(interfaceNames[i]);

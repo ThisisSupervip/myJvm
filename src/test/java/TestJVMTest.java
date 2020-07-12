@@ -14,76 +14,73 @@ class TestJVMTest {
    public void test_classpath_loader(){
       Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\classes");
       byte[] bytes = classpath.readClass("com.lgb.TestClass");
-      ClassFile classFile = new ClassFile(bytes);
       String hexString = bytesToHex(bytes);
       Assertions.assertTrue(hexString.startsWith("cafebabe"));
    }
 
    @Test
    public void test_interpreter(){
-      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
-      Class clazz = JVM.loadClass("jvmgo.book.ch07.InvokeDemo", classpath);
-      Method mainMethod = JVM.getMainMethod(clazz);
-      Interpreter.interpret(mainMethod, new String[]{});
+      JVM jvm = new JVM("E:\\Study\\Java\\myJvm\\target\\test-classes",
+              "jvmgo.book.ch07.InvokeDemo", new String[]{});
+      jvm.start();
    }
 
    @Test
    public void ch08_test_bubble_sort(){
-      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
-      Class clazz = JVM.loadClass("jvmgo.book.ch08.BubbleSortTest", classpath);
-      Method mainMethod = JVM.getMainMethod(clazz);
-      Interpreter.interpret(mainMethod, new String[]{});
+      JVM jvm = new JVM("E:\\Study\\Java\\myJvm\\target\\test-classes",
+              "jvmgo.book.ch08.BubbleSortTest", new String[]{});
+      jvm.start();
    }
 
    @Test
    public void ch08_print_args() {
-      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
-      Class clazz = JVM.loadClass("jvmgo.book.ch08.PrintArgs", classpath);
-      Method mainMethod = JVM.getMainMethod(clazz);
       String[] args = "foo bar 你好，世界".split(" ");
-      Interpreter.interpret(mainMethod, args);
+      JVM jvm = new JVM("E:\\Study\\Java\\myJvm\\target\\test-classes",
+              "jvmgo.book.ch08.PrintArgs", args);
+      jvm.start();
    }
 
    @Test
    public void ch09_getClassTest() {
-      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
-      Class clazz = JVM.loadClass("jvmgo.book.ch09.GetClassTest", classpath);
-      Method mainMethod = JVM.getMainMethod(clazz);
-      Interpreter.interpret(mainMethod, new String[]{});
+      JVM jvm = new JVM("E:\\Study\\Java\\myJvm\\target\\test-classes",
+              "jvmgo.book.ch09.GetClassTest", new String[]{});
+      jvm.start();
    }
 
    @Test
    public void ch09_stringTest() {
-      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
-      Class clazz = JVM.loadClass("jvmgo.book.ch09.StringTest", classpath);
-      Method mainMethod = JVM.getMainMethod(clazz);
-      Interpreter.interpret(mainMethod, new String[]{});
+      JVM jvm = new JVM("E:\\Study\\Java\\myJvm\\target\\test-classes",
+              "jvmgo.book.ch09.StringTest", new String[]{});
+      jvm.start();
    }
 
    @Test
    public void ch09_cloneTest() {
-      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
-      Class clazz = JVM.loadClass("jvmgo.book.ch09.CloneTest", classpath);
-      Method mainMethod = JVM.getMainMethod(clazz);
-      Interpreter.interpret(mainMethod, new String[]{});
+      JVM jvm = new JVM("E:\\Study\\Java\\myJvm\\target\\test-classes",
+              "jvmgo.book.ch09.CloneTest", new String[]{});
+      jvm.start();
    }
 
    @Test
    public void ch09_boxTest() {
-      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
-      Class clazz = JVM.loadClass("jvmgo.book.ch09.BoxTest", classpath);
-      Method mainMethod = JVM.getMainMethod(clazz);
-      Interpreter.interpret(mainMethod, new String[]{});
+      JVM jvm = new JVM("E:\\Study\\Java\\myJvm\\target\\test-classes",
+              "jvmgo.book.ch09.BoxTest", new String[]{});
+      jvm.start();
    }
 
    @Test
    public void ch10_parseIntTest() {
-      Classpath classpath = new Classpath("E:\\Study\\Java\\myJvm\\target\\test-classes");
-      Class clazz = JVM.loadClass("jvmgo.book.ch10.ParseIntTest", classpath);
-      Method mainMethod = JVM.getMainMethod(clazz);
-      Interpreter.interpret(mainMethod, new String[]{});
+      JVM jvm = new JVM("E:\\Study\\Java\\myJvm\\target\\test-classes",
+              "jvmgo.book.ch10.ParseIntTest", new String[]{});
+      jvm.start();
    }
 
+   @Test
+   public void ch11_helloWorld() {
+      JVM jvm = new JVM("E:\\Study\\Java\\myJvm\\target\\test-classes",
+              "jvmgo.book.ch11.HelloWorld", new String[]{});
+      jvm.start();
+   }
 
    public static String bytesToHex(byte[] bytes) {
       StringBuffer sb = new StringBuffer();
